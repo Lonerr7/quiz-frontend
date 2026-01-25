@@ -28,6 +28,8 @@
     "baseUrl": ".",
     "paths": {
       "@api/*": ["./src/api/*"],
+      "@config/*": ["./src/config/*"],
+      "@helpers/*": ["./src/helpers/*"],
       "@components/*": ["./src/components/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@pages/*": ["./src/pages/*"],
