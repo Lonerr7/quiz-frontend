@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+  --font-open-sans: "Open Sans", sans-serif;
+
+  /* Основные фоны и поверхности */
+  --color-bg-main: #F9FBFC;
+  --color-surface: #FFFFFF;
+
+  /* Brand: Deep Teal (Бирюза) */
+  --color-primary: #0D9488;
+  --color-primary-foreground: #FFFFFF;
+  --color-primary-hover: #0A756C;
+
+  /* Secondary: Soft Slate (Серый) */
+  --color-secondary: #E2E8F0;
+  --color-secondary-foreground: #1E293B;
+  --color-secondary-hover: #CBD5E1;
+
+  /* Текст */
+  --color-text-main: #1E293B;
+  --color-text-muted: #64748B;
+
+  /* Статусы */
+  --color-success: #10B981;
+  --color-error: #F43F5E;
+  --color-warning: #F59E0B;
+
+  /* Границы */
+  --color-border: #4a4f50;
+
+  /* Делаем границы чуть темнее (Slate 300 вместо 200) */
+  --color-input-border: #CBD5E1;
+  /* Фон инпута — чуть темнее основного фона страницы, чтобы он "проседал" внутрь */
+  --color-input-bg: #F1F5F9;
+  --color-input-placeholder: #64748B;
+}
+
+@layer components {
+  .form-control {
+    @apply flex flex-col;
+  }
+}

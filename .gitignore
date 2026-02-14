@@ -26,3 +26,7 @@ dist-ssr
 # .env
 .env.development
 .env.production
+
+#Images
+Main-Page-Layout.jpg
+Test-Controls-Page-Layout.jpg

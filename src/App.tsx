@@ -1,23 +1,16 @@
-import {useEffect} from "react";
-import {authApi} from '@api/auth/authApi';
+import {RouterProvider} from "react-router";
+import {Provider} from "react-redux";
+import {Toaster} from "sonner";
+import {store} from "@/redux/store";
+import {router} from "@/config/router/router";
 
 function App() {
-  useEffect(() => {
-    (async() => {
-      const response = await authApi.logIn({
-        name: "Mengling",
-         password: "pass12345"
-      });
-
-      console.log(response);
-    })()
-  }, []);
-
   return (
-    <>
-      App
-    </>
-  )
+    <Provider store={store}>
+      <RouterProvider router={router}/>
+      <Toaster/>
+    </Provider>
+  );
 }
 
 export default App
