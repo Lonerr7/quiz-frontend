@@ -15,7 +15,9 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary-hover focus-visible:ring-secondary",
         outline:
           "bg-transparent border border-border text-text-main hover:bg-bg-main hover:border-text-muted",
-        ghost:
+        ghost_primary:
+          "bg-white/10 hover:bg-white/20 border border-white/30 px-4 py-1.5 rounded-md font-medium transition-colors disabled:opacity-75 inline-block",
+        ghost_secondary:
           "bg-transparent text-text-muted hover:bg-primary-light hover:text-primary",
         danger:
           "bg-error text-white hover:opacity-90 focus-visible:ring-error",

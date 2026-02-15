@@ -8,7 +8,9 @@ export const TestsPage = () => {
 
   return (
     <div>
-      TestsPage
+      <div className="app-container">
+        TestsPage
+      </div>
     </div>
   )
 }

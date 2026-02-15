@@ -40,4 +40,10 @@
   .form-control {
     @apply flex flex-col;
   }
+
+  .app-container {
+    @apply px-6 mx-auto;
+    max-width: 1600px;
+  }
 }
+

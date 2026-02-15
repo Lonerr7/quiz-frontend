@@ -1,5 +1,7 @@
 import {NavLink, useNavigate} from "react-router";
 import {useGetMeQuery, useLogOutMutation} from "@/api/endpoints/authEndpoints";
+import {cn} from "@/helpers/utils/cn";
+import {Button} from "@/components/common";
 
 export const Header = () => {
   const {data: me, isError} = useGetMeQuery();
@@ -18,20 +20,45 @@ export const Header = () => {
   return (
     <>
       {!isError && me ? (
-        <header>
-          <ul className="flex items-center gap-2.5">
-            <li>
-              <NavLink to="/" className={({isActive}) => isActive ? "font-bold" : ""}>
-                Тесты
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/add-test" className={({isActive}) => isActive ? "font-bold" : ""}>
-                Добавить тест
-              </NavLink>
-            </li>
-          </ul>
-          <button onClick={handleLogout}>{!isLoading ? 'Выйти' : 'Выходим...'}</button>
+        <header
+          className="bg-primary text-primary-foreground shadow-md py-3 mb-10">
+
+          <div className="app-container">
+            <div className="flex justify-between items-center gap-2.5">
+              <ul className="flex items-center gap-6">
+                <li>
+                  <NavLink
+                    to="/"
+                    className={({isActive}) => cn(
+                      "text-sm uppercase tracking-wide transition-opacity hover:opacity-80",
+                      isActive ? "font-bold border-b-2 border-white pb-1" : "opacity-90"
+                    )}
+                  >
+                    Тесты
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/add-test"
+                    className={({isActive}) => cn(
+                      "text-sm uppercase tracking-wide transition-opacity hover:opacity-80",
+                      isActive ? "font-bold border-b-2 border-white pb-1" : "opacity-90"
+                    )}
+                  >
+                    Добавить тест
+                  </NavLink>
+                </li>
+              </ul>
+              <Button
+                variant="ghost_primary"
+                size="sm"
+                onClick={handleLogout}
+                disabled={isLoading}
+              >
+                {!isLoading ? 'Выйти' : 'Выходим...'}
+              </Button>
+            </div>
+          </div>
         </header>
       ) : null}
     </>
