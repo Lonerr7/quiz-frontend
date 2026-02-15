@@ -1,12 +1,12 @@
-import {Input} from "@/components/common/Input";
+import {Button, Input, ErrorMessage, Label} from '@/components/common';
 import {useLogInMutation} from "@/api/endpoints/authEndpoints";
-import {type FieldValues, useForm} from "react-hook-form";
+import {useForm} from "react-hook-form";
 import {useNavigate} from "react-router";
-import {Button} from "@/components/common/Button";
 import type {FC} from "react";
 import {cn} from "@/helpers/utils/cn";
-import {Label} from "@/components/common/Label";
 import {toast} from "sonner";
+import {LogInSchema, type LogInSchemaType} from './LogInSchema';
+import {zodResolver} from "@hookform/resolvers/zod";
 
 interface LogInFormProps {
   className?: string;
@@ -14,11 +14,10 @@ interface LogInFormProps {
 
 export const LogInForm: FC<LogInFormProps> = ({className}) => {
   const [logIn, {isLoading}] = useLogInMutation();
-  const {register, formState: {errors, isSubmitting}, handleSubmit} = useForm();
+  const {register, formState: {errors}, handleSubmit} = useForm<LogInSchemaType>({resolver: zodResolver(LogInSchema)});
   const navigate = useNavigate();
 
-  const onSubmit = async (fieldValues: FieldValues) => {
-    console.log(fieldValues);
+  const onSubmit = async (fieldValues: LogInSchemaType) => {
     const {name, password} = fieldValues;
 
     try {
@@ -27,14 +26,11 @@ export const LogInForm: FC<LogInFormProps> = ({className}) => {
       toast.dismiss();
       toast.success('Successfully logged in!');
     } catch (err: any) {
-      console.error(err);
       if (err.data.message) {
         toast.error(err.data.message, {duration: 7000});
       }
     }
   }
-
-  console.log(errors);
 
   return (
     <form
@@ -45,15 +41,11 @@ export const LogInForm: FC<LogInFormProps> = ({className}) => {
         <Label htmlFor="name">Имя</Label>
         <Input
           className="border"
-          {...register('name', {
-            required: {
-              value: true,
-              message: 'Имя обязательно'
-            },
-          })}
+          {...register('name')}
           type="text"
           id="name"
         />
+        {errors.name && <ErrorMessage className="mt-1">{errors.name.message}</ErrorMessage>}
       </div>
       <div className="form-control">
         <Label htmlFor="password">Пароль</Label>
@@ -63,8 +55,15 @@ export const LogInForm: FC<LogInFormProps> = ({className}) => {
           type="password"
           id="password"
         />
+        {errors.password && <ErrorMessage className="mt-1">{errors.password.message}</ErrorMessage>}
       </div>
-      <Button className="w-full" type="submit">{!isLoading ? 'Войти' : 'Входим...'}</Button>
+      <Button
+        className="w-full"
+        type="submit"
+        disabled={isLoading}
+      >
+        {!isLoading ? 'Войти' : 'Входим...'}
+      </Button>
     </form>
   )
 }

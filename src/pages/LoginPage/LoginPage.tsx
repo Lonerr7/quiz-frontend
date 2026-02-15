@@ -1,4 +1,4 @@
-import {LogInForm} from "@/components/LogInForm/LogInForm";
+import {LogInForm} from "@/components";
 import {Button} from "@/components/common/Button";
 import {useNavigate} from "react-router";
 
