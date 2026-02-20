@@ -47,3 +47,8 @@
   }
 }
 
+@layer base {
+  button {
+    cursor: pointer;
+  }
+}

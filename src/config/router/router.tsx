@@ -9,7 +9,26 @@ export const router = createBrowserRouter([
     Component: Layout,
     children: [
       {index: true, Component: TestsPage},
-      {path: 'add-test', element: <ProtectedRoute allowedRoles={['admin']}><AddTestPage /></ProtectedRoute>}
+      {
+        path: 'add-test',
+        element: (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AddTestPage />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: '/tests/:id',
+        element: <div>Пройти тест</div>
+      },
+      {
+        path: '/tests/:id/edit',
+        element: (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <div>edit test</div>
+          </ProtectedRoute>
+        )
+      }
     ],
   },
   {

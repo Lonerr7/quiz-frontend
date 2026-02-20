@@ -13,7 +13,7 @@ const testsEndpoints = apiSlice.injectEndpoints({
   })
 });
 
-interface ITestPreview {
+export interface ITestPreview {
   _id: string;
   name: string;
   createdAt: string;
