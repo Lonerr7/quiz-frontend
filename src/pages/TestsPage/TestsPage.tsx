@@ -1,9 +1,6 @@
 import {TestsList} from "@/components/TestsList/TestsList.tsx";
 
-
 export const TestsPage = () => {
-
-
   return (
     <div className="mt-22">
       <div className="app-container">

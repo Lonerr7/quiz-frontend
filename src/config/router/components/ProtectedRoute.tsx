@@ -1,7 +1,8 @@
 import {type FC, type ReactNode} from "react";
-import {useGetMeQuery, type UserRoles} from "@/api/endpoints/authEndpoints";
+import {type UserRoles} from "@/api/endpoints/authEndpoints";
 import {Button} from "@/components/common";
 import {Link} from "react-router";
+import {useAuth} from "@/api/hooks/useAuth.ts";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -10,8 +11,8 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute: FC<ProtectedRouteProps> = (props) => {
   const {children, allowedRoles} = props;
-  const {data: me, isLoading, isError} = useGetMeQuery();
-  const isAllowed = !isLoading && !isError && (me && allowedRoles.includes(me.role));
+  const {me, isLoading} = useAuth();
+  const isAllowed = !isLoading && me && allowedRoles.includes(me.role);
 
   if (isLoading) {
     return <div>Загрузка...</div>

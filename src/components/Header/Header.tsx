@@ -1,10 +1,11 @@
 import {NavLink} from "react-router";
-import {useGetMeQuery, useLogOutMutation} from "@/api/endpoints/authEndpoints";
+import {useLogOutMutation} from "@/api/endpoints/authEndpoints";
 import {cn} from "@/helpers/utils/cn";
 import {Button} from "@/components/common";
+import {useAuth} from "@/api/hooks/useAuth.ts";
 
 export const Header = () => {
-  const {data: me, isError} = useGetMeQuery();
+  const {me} = useAuth();
   const [logOut, {isLoading}] = useLogOutMutation();
 
   const handleLogout = async () => {
@@ -32,7 +33,7 @@ export const Header = () => {
                   Тесты
                 </NavLink>
               </li>
-              {!isError && me ? (
+              {me ? (
                 <li>
                   <NavLink
                     to="/add-test"
@@ -46,7 +47,7 @@ export const Header = () => {
                 </li>
               ) : null}
             </ul>
-            {!isError && me ? (
+            {me ? (
               <Button
                 variant="ghost_primary"
                 size="sm"

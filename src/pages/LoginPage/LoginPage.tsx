@@ -1,11 +1,11 @@
 import {LogInForm} from "@/components";
 import {Button} from "@/components/common/Button";
 import {useNavigate} from "react-router";
-import {useGetMeQuery} from "@/api/endpoints/authEndpoints.ts";
 import {useEffect} from "react";
+import {useAuth} from "@/api/hooks/useAuth.ts";
 
 export const LoginPage = () => {
-  const {data: me, isLoading} = useGetMeQuery();
+  const {me, isLoading} = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {

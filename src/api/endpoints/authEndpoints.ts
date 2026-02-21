@@ -5,7 +5,7 @@ const authEndpoints = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getMe: builder.query<IUser, void>({
       query: () => '/users/me',
-      transformResponse: (response: SuccessResponse<{user: IUser}>) => response.data.user,
+      transformResponse: (response: SuccessResponse<{user: IUser}>) => response?.data.user,
       providesTags: [API_TAGS.ME]
     }),
     logIn: builder.mutation<IUser, LoginData>({

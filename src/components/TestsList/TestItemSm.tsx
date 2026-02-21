@@ -1,4 +1,4 @@
-import type {ITestPreview} from "@/api/endpoints/testsEndpoints.ts";
+import type {ITestBase} from "@/api/endpoints/testsEndpoints.ts";
 import type {FC} from "react";
 import {cn} from "@/helpers/utils/cn";
 import {Link, useNavigate} from "react-router";
@@ -6,7 +6,7 @@ import {Button} from "@/components/common";
 import {type IUser} from "@/api/endpoints/authEndpoints.ts";
 
 interface TestItemSmProps {
-  test: ITestPreview;
+  test: ITestBase;
   me?: IUser | undefined;
   className?: string;
 }
