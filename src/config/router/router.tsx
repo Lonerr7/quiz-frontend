@@ -2,6 +2,7 @@ import {createBrowserRouter} from "react-router";
 import {LoginPage, NotFoundPage, TestsPage, AddTestPage} from "@/pages";
 import {ProtectedRoute} from "@/config/router/components/ProtectedRoute";
 import {Layout} from "@/components";
+import {PassTestPage} from "@/pages/PassTestPage/PassTestPage.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -19,7 +20,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/tests/:id',
-        element: <div>Пройти тест</div>
+        Component: PassTestPage,
       },
       {
         path: '/tests/:id/edit',

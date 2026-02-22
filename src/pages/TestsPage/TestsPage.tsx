@@ -1,13 +1,12 @@
 import {TestsList} from "@/components/TestsList/TestsList.tsx";
+import {PageWrapper} from "@/components/common/PageWrapper.tsx";
 
 export const TestsPage = () => {
   return (
-    <div className="mt-22">
-      <div className="app-container">
-        <div className="max-w-4xl mx-auto">
-          <TestsList/>
-        </div>
+    <PageWrapper>
+      <div className="max-w-4xl mx-auto">
+        <TestsList/>
       </div>
-    </div>
+    </PageWrapper>
   );
 }

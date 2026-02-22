@@ -10,8 +10,11 @@ const testsEndpoints = apiSlice.injectEndpoints({
         return normalizeData(response.data.tests);
       },
     }),
-    getTest: builder.query({
-      query: () => ''
+    getTest: builder.query<ITestForUser, string>({
+      query: (testId) => `/tests/${testId}`,
+      transformResponse: (response: SuccessResponse<{test: ITestForUser}>) => {
+        return response.data.test;
+      }
     })
   })
 });
@@ -42,4 +45,4 @@ export interface ITestForAdmin extends ITestBase {
   questions: ITestQuestionForAdmin[];
 }
 
-export const {useGetTestsQuery} = testsEndpoints;
+export const {useGetTestsQuery, useGetTestQuery} = testsEndpoints;

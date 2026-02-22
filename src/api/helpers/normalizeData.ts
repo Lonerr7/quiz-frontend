@@ -7,7 +7,7 @@ export interface NormalizedData<T> {
   entities: Record<string, T>;
 }
 
-export function normalizeData<T extends  BaseItem>(data: T[]) {
+export function normalizeData<T extends BaseItem>(data: T[]) {
   return data.reduce<NormalizedData<typeof data[number]>>((acc, curr) => {
     acc.entities[curr._id] = curr;
     acc.ids.push(curr._id);
