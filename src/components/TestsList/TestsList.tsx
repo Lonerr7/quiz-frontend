@@ -1,4 +1,4 @@
-import {useGetTestsQuery} from "@/api/endpoints/testsEndpoints.ts";
+import {useGetTestsQuery} from "@/api/endpoints/testsEndpoints/testsEndpoints.ts";
 import {TestItemSm} from "@/components/TestsList/TestItemSm.tsx";
 import {useAuth} from "@/api/hooks/useAuth.ts";
 

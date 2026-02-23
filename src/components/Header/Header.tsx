@@ -18,7 +18,7 @@ export const Header = () => {
 
   return (
     <>
-      <header className="bg-primary text-primary-foreground shadow-md py-3 fixed w-full top-0 py-[18px]">
+      <header className="bg-primary text-primary-foreground shadow-md py-3 fixed z-50 w-full top-0 py-[18px]">
         <div className="app-container">
           <div className="flex justify-between items-center gap-2.5">
             <ul className="flex items-center gap-6">

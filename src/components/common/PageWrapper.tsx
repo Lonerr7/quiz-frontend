@@ -4,7 +4,9 @@ export const PageWrapper: FC<HTMLAttributes<HTMLDivElement>> = ({children, ...pr
   return (
     <div className="mt-22" {...props}>
       <div className="app-container">
-        {children}
+        <div className="max-w-4xl mx-auto">
+          {children}
+        </div>
       </div>
     </div>
   )
