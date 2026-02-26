@@ -1,6 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {apiSlice} from "@/api/slice/api";
-import {passTestSliceReducer} from "@/redux/slices/passTestSlice/passTestSlice.ts";
+import {passTestSliceReducer} from "@/redux/slices/passTestSlice/slice/passTestSlice.ts";
 
 export const store = configureStore({
   reducer: {

@@ -2,7 +2,7 @@ import {Label, RadioGroup, RadioGroupItem} from "@/components/common";
 import type {DetailedHTMLProps, FC, HTMLAttributes} from "react";
 import {cn} from "@/helpers/utils/cn.ts";
 
-interface QuestionWithAnswersProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+interface QuestionWithAnswersProps extends DetailedHTMLProps<HTMLAttributes<HTMLLIElement>, HTMLLIElement> {
   questionId: string;
   questionText: string;
   questionNumber?: number;
@@ -14,8 +14,7 @@ export const QuestionWithAnswers: FC<QuestionWithAnswersProps> = (props) => {
   const {questionId, questionNumber, questionText, options, onAnswerClick, className, ...restProps} = props;
 
   return (
-    <div className={cn("flex flex-col bg-surface p-6 rounded-2xl border border-border shadow-sm", className)} {...restProps}>
-      {/* Текст вопроса */}
+    <li className={cn("flex flex-col bg-surface p-6 rounded-2xl border border-border shadow-sm", className)} {...restProps}>
       <div className="text-lg font-semibold text-text-main mb-5 leading-snug">
         {questionNumber ? <span className="mr-2">{questionNumber}.</span> : null}
         <span>{questionText}</span>
@@ -50,6 +49,6 @@ export const QuestionWithAnswers: FC<QuestionWithAnswersProps> = (props) => {
           )
         })}
       </RadioGroup>
-    </div>
+    </li>
   )
 }

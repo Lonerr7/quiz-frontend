@@ -1,11 +1,12 @@
 import {useNavigate, useParams} from "react-router";
 import {PageWrapper} from "@/components/common/PageWrapper.tsx";
-import {useGetTestQuery, useSubmitTestMutation} from "@/api/endpoints/testsEndpoints/testsEndpoints.ts";
+import {useGetTestQuery} from "@/api/endpoints/testsEndpoints/testsEndpoints.ts";
 import {useEffect} from "react";
 import {useAppDispatch} from "@/redux/hooks/reduxHooks.ts";
-import {passTestSliceActions} from "@/redux/slices/passTestSlice/passTestSlice.ts";
+import {passTestSliceActions} from "@/redux/slices/passTestSlice/slice/passTestSlice.ts";
 import {QuestionWithAnswers} from "@/components";
 import {Button} from "@/components/common";
+import {SubmitPassedTestControls} from "./components/SubmitPassedTestControls";
 
 export const PassTestPage = () => {
   const {id} = useParams();
@@ -13,12 +14,10 @@ export const PassTestPage = () => {
   const {data: test, isLoading, isError} = useGetTestQuery(id!);
   const dispatch = useAppDispatch();
   const {setTestId, setAnswer, resetState} = passTestSliceActions;
-  const [submitTest, {data, isLoading: isSubmitTestLoading}] = useSubmitTestMutation();
 
   /*
     TODO:
-    1. Сделать индикатор отправки запроса и перенаправление на страницу результата теста с его отображением
-    2. Добавить валидацию теста, при которой если не все ответы прожаты - показывать сообщение об этом
+    1. Сделать перенаправление на страницу результата теста с его отображением (перенаправление сделано; верстка страницы - в процессе)
     3. Отобразить ошибку при сабмите теста на сервер (если будет) и не редиректить пользователя на страницу ответов при этом
     4. Перенести все остальные типы из endpoints в свои файлы схемы.
     5. Типизировать все ошибки из RTK Query
@@ -34,6 +33,11 @@ export const PassTestPage = () => {
     };
   }, [test]);
 
+
+  const handleAnswerSelect = (qId: string, answer: string) => {
+    dispatch(setAnswer({qId, answer: Number(answer)}));
+  }
+
   if (isLoading) {
     return <div>Загрузка теста...</div>
   }
@@ -41,17 +45,6 @@ export const PassTestPage = () => {
   if (isError) {
     return <div>Ошибка загрузки теста...</div>
   }
-
-  const handleAnswerSelect = (qId: string, answer: string) => {
-    dispatch(setAnswer({qId, answer: Number(answer)}));
-  }
-
-  const handleSubmit = () => {
-    submitTest();
-  }
-
-  console.log(data);
-  console.log(isSubmitTestLoading);
 
   return (
     <PageWrapper>
@@ -75,7 +68,7 @@ export const PassTestPage = () => {
             </p>
           </div>
 
-          <div className="flex flex-col gap-6 mb-10">
+          <ul className="flex flex-col gap-6 mb-10">
             {test.questions.map(({_id: qId, text, options}, i) => (
               <QuestionWithAnswers
                 key={qId}
@@ -86,9 +79,9 @@ export const PassTestPage = () => {
                 onAnswerClick={handleAnswerSelect}
               />
             ))}
-          </div>
+          </ul>
 
-          <Button className="block ml-auto" onClick={handleSubmit}>Завершить тест</Button>
+          <SubmitPassedTestControls testFromServer={test} />
         </div>
       ) : null}
     </PageWrapper>

@@ -20,7 +20,7 @@ const testsEndpoints = apiSlice.injectEndpoints({
       }
     }),
     submitTest: builder.mutation<PassTestResponse, void>({
-      queryFn: async (arg, api, extraOptions, baseQuery) => {
+      queryFn: async (arg, api, extraOptions, baseQuery) =>  {
         const state = api.getState() as RootState;
         const {testId, answers} = state.passTest;
 

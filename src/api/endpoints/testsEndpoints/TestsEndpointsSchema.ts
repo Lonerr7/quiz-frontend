@@ -26,6 +26,7 @@ export interface ITestForAdmin extends ITestBase {
 
 interface IPassTestResult extends ITestForAdmin {
   isCorrect: boolean;
+  userAnswer: number | null;
 }
 export interface PassTestResponse {
   testId: string;

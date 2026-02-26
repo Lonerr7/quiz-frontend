@@ -1,5 +1,5 @@
-import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
-import type {PassTestSliceInitialState} from "@/redux/slices/passTestSlice/PassTestSliceSchema.ts";
+import {createSlice, type PayloadAction} from '@reduxjs/toolkit';
+import type {PassTestSliceInitialState} from '@/redux/slices/passTestSlice/schema/PassTestSliceSchema.ts';
 
 const initialState: PassTestSliceInitialState = {
   testId: null,
@@ -15,7 +15,6 @@ const passTestSlice = createSlice({
     },
     setAnswer: (state, action: PayloadAction<{qId: string; answer: number}>) => {
       const {qId, answer} = action.payload;
-
       state.answers[qId] = answer;
     },
 
