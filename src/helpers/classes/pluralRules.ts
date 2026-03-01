@@ -1,0 +1,1 @@
+export const pluralRules = new Intl.PluralRules('ru');

@@ -3,10 +3,20 @@ import type {SuccessResponse} from "@/api/schema/ResponseSchema";
 
 const authEndpoints = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getMe: builder.query<IUser, void>({
-      query: () => '/users/me',
-      transformResponse: (response: SuccessResponse<{user: IUser}>) => response?.data.user,
-      providesTags: [API_TAGS.ME]
+    getMe: builder.query<IUser | undefined, void>({
+      providesTags: [API_TAGS.ME],
+      queryFn: async (arg, api, extraOptions, baseQuery) => {
+        const {data, error} = await baseQuery({
+          url: '/users/me',
+        });
+
+        if (error) {
+          return {data: undefined}
+        }
+
+        const successResponse = data as SuccessResponse<{user: IUser}>;
+        return {data: successResponse.data.user};
+      },
     }),
     logIn: builder.mutation<IUser, LoginData>({
       query: (loginData) => ({

@@ -1,5 +1,5 @@
-import {Label, RadioGroup, RadioGroupItem} from "@/components/common";
 import type {DetailedHTMLProps, FC, HTMLAttributes} from "react";
+import {Label, RadioGroup, RadioGroupItem} from "@/components/common";
 import {cn} from "@/helpers/utils/cn.ts";
 
 interface QuestionWithAnswersProps extends DetailedHTMLProps<HTMLAttributes<HTMLLIElement>, HTMLLIElement> {
@@ -14,8 +14,8 @@ export const QuestionWithAnswers: FC<QuestionWithAnswersProps> = (props) => {
   const {questionId, questionNumber, questionText, options, onAnswerClick, className, ...restProps} = props;
 
   return (
-    <li className={cn("flex flex-col bg-surface p-6 rounded-2xl border border-border shadow-sm", className)} {...restProps}>
-      <div className="text-lg font-semibold text-text-main mb-5 leading-snug">
+    <li className={cn("test-card", className)} {...restProps}>
+      <div className="question-title">
         {questionNumber ? <span className="mr-2">{questionNumber}.</span> : null}
         <span>{questionText}</span>
       </div>
@@ -30,7 +30,7 @@ export const QuestionWithAnswers: FC<QuestionWithAnswersProps> = (props) => {
               key={elementId}
               className={cn(
                 "flex items-center rounded-xl border border-transparent transition-all relative",
-                "hover:bg-bg-main hover:border-border group"
+                "hover:bg-bg-main hover:border-border"
               )}
             >
               <RadioGroupItem

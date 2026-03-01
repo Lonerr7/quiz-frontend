@@ -24,11 +24,12 @@ export interface ITestForAdmin extends ITestBase {
   questions: ITestQuestionForAdmin[];
 }
 
-interface IPassTestResult extends ITestForAdmin {
+interface IPassTestResult extends ITestQuestionForAdmin {
   isCorrect: boolean;
   userAnswer: number | null;
 }
 export interface PassTestResponse {
   testId: string;
   result: IPassTestResult[];
+  correctAnswersCount: number;
 }
