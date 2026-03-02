@@ -1,20 +1,40 @@
-import type {DetailedHTMLProps, FC, HTMLAttributes} from "react";
-import {Label, RadioGroup, RadioGroupItem} from "@/components/common";
-import {cn} from "@/helpers/utils/cn.ts";
+import {type DetailedHTMLProps, type FC, type HTMLAttributes} from 'react';
+import {Label, RadioGroup, RadioGroupItem} from '@/components/common';
+import {cn} from '@/helpers/utils/cn.ts';
 
-interface QuestionWithAnswersProps extends DetailedHTMLProps<HTMLAttributes<HTMLLIElement>, HTMLLIElement> {
+interface QuestionWithAnswersProps extends DetailedHTMLProps<
+  HTMLAttributes<HTMLLIElement>,
+  HTMLLIElement
+> {
   questionId: string;
   questionText: string;
   questionNumber?: number;
   options: string[];
+  isUnanswered: boolean;
   onAnswerClick: (qId: string, answerAsString: string) => void;
 }
 
 export const QuestionWithAnswers: FC<QuestionWithAnswersProps> = (props) => {
-  const {questionId, questionNumber, questionText, options, onAnswerClick, className, ...restProps} = props;
+  const {
+    questionId,
+    questionNumber,
+    questionText,
+    options,
+    isUnanswered,
+    onAnswerClick,
+    className,
+    ...restProps
+  } = props;
 
   return (
-    <li className={cn("test-card", className)} {...restProps}>
+    <li
+      className={cn(
+        'test-card transition-all duration-500 ease-in-out',
+        {'bg-amber-50 border-amber-300 ring-2 ring-amber-200/50 animate-shake': isUnanswered},
+        className,
+      )}
+      {...restProps}
+    >
       <div className="question-title">
         {questionNumber ? <span className="mr-2">{questionNumber}.</span> : null}
         <span>{questionText}</span>
@@ -29,8 +49,8 @@ export const QuestionWithAnswers: FC<QuestionWithAnswersProps> = (props) => {
             <div
               key={elementId}
               className={cn(
-                "flex items-center rounded-xl border border-transparent transition-all relative",
-                "hover:bg-bg-main hover:border-border"
+                'flex items-center rounded-xl border border-transparent transition-all relative',
+                'hover:bg-bg-main hover:border-border',
               )}
             >
               <RadioGroupItem
@@ -46,9 +66,9 @@ export const QuestionWithAnswers: FC<QuestionWithAnswersProps> = (props) => {
                 {option}
               </Label>
             </div>
-          )
+          );
         })}
       </RadioGroup>
     </li>
-  )
-}
+  );
+};

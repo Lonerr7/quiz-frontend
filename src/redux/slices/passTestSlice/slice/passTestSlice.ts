@@ -4,6 +4,7 @@ import type {PassTestSliceInitialState} from '@/redux/slices/passTestSlice/schem
 const initialState: PassTestSliceInitialState = {
   testId: null,
   answers: {},
+  unansweredQuestion: null,
 };
 
 const passTestSlice = createSlice({
@@ -16,6 +17,9 @@ const passTestSlice = createSlice({
     setAnswer: (state, action: PayloadAction<{qId: string; answer: number}>) => {
       const {qId, answer} = action.payload;
       state.answers[qId] = answer;
+    },
+    setUnansweredQuestion: (state, action: PayloadAction<string | null>) => {
+      state.unansweredQuestion = action.payload;
     },
 
     resetState: () => initialState,

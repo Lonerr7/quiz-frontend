@@ -1,24 +1,26 @@
 import {useNavigate, useParams} from "react-router";
 import {PageWrapper} from "@/components/common/PageWrapper.tsx";
 import {useGetTestQuery} from "@/api/endpoints/testsEndpoints/testsEndpoints.ts";
-import {useEffect} from "react";
-import {useAppDispatch} from "@/redux/hooks/reduxHooks.ts";
+import {useEffect, useRef} from "react";
+import {useAppDispatch, useAppSelector} from "@/redux/hooks/reduxHooks.ts";
 import {passTestSliceActions} from "@/redux/slices/passTestSlice/slice/passTestSlice.ts";
 import {QuestionWithAnswers} from "@/components";
 import {Button} from "@/components/common";
 import {SubmitPassedTestControls} from "./components/SubmitPassedTestControls";
+import {getUnansweredQuestion} from "@/redux/slices/passTestSlice/selectors/getUnansweredQuestion.ts";
 
 export const PassTestPage = () => {
   const {id} = useParams();
   const navigate = useNavigate();
   const {data: test, isLoading, isError} = useGetTestQuery(id!);
+  const unansweredQuestion = useAppSelector(getUnansweredQuestion);
+  const questionRefs = useRef<Map<string, HTMLLIElement>>(new Map());
   const dispatch = useAppDispatch();
-  const {setTestId, setAnswer, resetState} = passTestSliceActions;
+  const {setTestId, setAnswer, resetState, setUnansweredQuestion} = passTestSliceActions;
 
   /*
     TODO:
     1. Сделать перенаправление на страницу результата теста с его отображением (перенаправление сделано; верстка страницы - в процессе).
-    2. При возможности сделать так, чтобы пользователь не мог отправить тест, пока не ответит на все вопросы. При клике на завершить тест -> показываем модалку, где есть только кнопка ОК. После клика на ОК -> нужно проскроллить к тому вопросу, на который нет ответа.
     3. Отобразить ошибку при сабмите теста на сервер (если будет) и не редиректить пользователя на страницу ответов при этом
     4. Перенести все остальные типы из endpoints в свои файлы схемы.
     5. Типизировать все ошибки из RTK Query
@@ -37,6 +39,7 @@ export const PassTestPage = () => {
 
   const handleAnswerSelect = (qId: string, answer: string) => {
     dispatch(setAnswer({qId, answer: Number(answer)}));
+    dispatch(setUnansweredQuestion(null));
   }
 
   if (isLoading) {
@@ -73,16 +76,22 @@ export const PassTestPage = () => {
             {test.questions.map(({_id: qId, text, options}, i) => (
               <QuestionWithAnswers
                 key={qId}
+                ref={(el) => {
+                  if (el) {
+                    questionRefs.current.set(qId, el);
+                  }
+                }}
                 questionId={qId}
                 questionNumber={i + 1}
                 questionText={text}
                 options={options}
+                isUnanswered={unansweredQuestion === qId}
                 onAnswerClick={handleAnswerSelect}
               />
             ))}
           </ul>
 
-          <SubmitPassedTestControls testFromServer={test} />
+          <SubmitPassedTestControls testFromServer={test} questionRefs={questionRefs} />
         </div>
       ) : null}
     </PageWrapper>

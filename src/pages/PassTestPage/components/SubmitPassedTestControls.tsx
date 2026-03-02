@@ -1,22 +1,36 @@
 import {Button, Spinner} from "@/components/common";
 import {useSubmitTestMutation} from "@/api/endpoints/testsEndpoints/testsEndpoints.ts";
 import type {ITestForUser} from "@/api/endpoints/testsEndpoints/TestsEndpointsSchema.ts";
-import {type FC, useState} from "react";
-import {useAppSelector} from "@/redux/hooks/reduxHooks.ts";
+import {type FC, type RefObject, useMemo, useRef, useState} from "react";
+import {useAppDispatch, useAppSelector} from "@/redux/hooks/reduxHooks.ts";
 import {getPassTestAnswers} from "@/redux/slices/passTestSlice/selectors/getPassTestAnswers.ts";
-import {ConfirmDialog} from "@/components/ConfirmDialog/ConfirmDialog.tsx";
 import {useNavigate} from "react-router";
+import {findUnansweredQuestion} from '../helpers/findUnansweredQuestion.ts';
+import {ConfirmDialog} from "@/components/ConfirmDialog/ConfirmDialog.tsx";
+import {passTestSliceActions} from "@/redux/slices/passTestSlice/slice/passTestSlice.ts";
 
 interface SubmitPassedTestControlsProps {
   testFromServer: ITestForUser | undefined;
+  questionRefs: RefObject<Map<string, HTMLLIElement>>;
 }
 
-export const SubmitPassedTestControls: FC<SubmitPassedTestControlsProps> = ({testFromServer}) => {
+export const SubmitPassedTestControls: FC<SubmitPassedTestControlsProps> = ({testFromServer, questionRefs}) => {
   const navigate = useNavigate();
   const [submitTest, {isLoading: isTestSubmitting}] = useSubmitTestMutation();
   const userAnswers = useAppSelector(getPassTestAnswers);
-  const testQuestions = testFromServer?.questions || [];
+  const unansweredQuestionId = useRef<string>('');
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
+  const {setUnansweredQuestion} = passTestSliceActions;
+  const dispatch = useAppDispatch();
+  const timerRef = useRef<number>(null);
+
+  const testQuestionIds = useMemo(() => {
+    if (!testFromServer?.questions) {
+      return [];
+    }
+
+    return testFromServer.questions.map(q => q._id);
+  }, [testFromServer]);
 
   const finishTest = async () => {
     const response = await submitTest();
@@ -27,11 +41,31 @@ export const SubmitPassedTestControls: FC<SubmitPassedTestControlsProps> = ({tes
   }
 
   const handleSubmit = () => {
-    if (Object.keys(userAnswers).length !== testQuestions.length) {
+    if (Object.keys(userAnswers).length !== testQuestionIds.length) {
+      unansweredQuestionId.current = findUnansweredQuestion(testQuestionIds, userAnswers);
+
       setIsSubmitDialogOpen(true);
       return;
     }
     finishTest();
+  }
+
+  const handleCloseModalWithScroll = () => {
+    const unansweredQuestion = questionRefs.current?.get(unansweredQuestionId.current);
+
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    if (unansweredQuestion) {
+      dispatch(setUnansweredQuestion(unansweredQuestionId.current));
+      unansweredQuestion.scrollIntoView({behavior: 'smooth', block: 'center'});
+
+      timerRef.current = setTimeout(() => {
+        dispatch(setUnansweredQuestion(null));
+      }, 3000);
+    }
+    setIsSubmitDialogOpen(false);
   }
 
   return (
@@ -42,10 +76,8 @@ export const SubmitPassedTestControls: FC<SubmitPassedTestControlsProps> = ({tes
       </Button>
       <ConfirmDialog
         open={isSubmitDialogOpen}
-        title="Внимание"
-        description="Вы не ответили на все вопросы. Все равно хотите завершить тест?"
-        handleClose={() => setIsSubmitDialogOpen(false)}
-        onConfirm={finishTest}
+        description="Вы не ответили на все вопросы!"
+        onConfirm={handleCloseModalWithScroll}
       />
     </div>
   )

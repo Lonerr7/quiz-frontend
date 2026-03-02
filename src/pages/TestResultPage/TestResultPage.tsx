@@ -10,8 +10,6 @@ export const TestResultPage = () => {
   const location = useLocation();
   const testResult: PassTestResponse | undefined = location.state?.testResult;
 
-  console.log(testResult);
-
   return (
     <PageWrapper>
       {testResult ? (
