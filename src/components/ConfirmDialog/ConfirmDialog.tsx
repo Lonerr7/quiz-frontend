@@ -8,8 +8,10 @@ import {
 import {Button} from '@/components/common';
 import type {FC} from 'react';
 import {VisuallyHidden} from "@radix-ui/react-visually-hidden";
+import {cn} from "@/helpers/utils/cn.ts";
 
 export interface ConfirmDialogProps {
+  className?: string;
   open: boolean;
   title?: string;
   description?: string;
@@ -17,6 +19,7 @@ export interface ConfirmDialogProps {
 }
 
 export const ConfirmDialog: FC<ConfirmDialogProps> = ({
+  className,
   open,
   title = 'Внимание',
   description,
@@ -24,9 +27,9 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
 }) => {
   return (
     <Dialog open={open} onOpenChange={onConfirm}>
-      <DialogContent className="w-[700px] flex flex-col gap-6 border-none shadow-2xl">
+      <DialogContent className={cn('flex flex-col gap-6 border-none shadow-2xl', className)}>
         <div className="flex flex-col gap-2">
-          <DialogTitle className="text-2xl font-bold text-text-main mb-0">{title}</DialogTitle>
+          <DialogTitle className="md:text-2xl font-bold text-text-main mb-0">{title}</DialogTitle>
           {description ? (
             <DialogDescription className="text-base text-text-muted text-balance leading-relaxed">
               {description}

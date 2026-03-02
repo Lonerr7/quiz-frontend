@@ -34,6 +34,8 @@
   /* Фон инпута — чуть темнее основного фона страницы, чтобы он "проседал" внутрь */
   --color-input-bg: #F1F5F9;
   --color-input-placeholder: #64748B;
+
+  --breakpoint-xs: 30rem;
 }
 
 @layer components {
