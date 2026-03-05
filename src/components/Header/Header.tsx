@@ -1,5 +1,5 @@
 import {NavLink} from "react-router";
-import {useLogOutMutation} from "@/api/endpoints/authEndpoints";
+import {useLogOutMutation} from "@/api/endpoints/authEndpoints/authEndpoints";
 import {cn} from "@/helpers/utils/cn";
 import {Button} from "@/components/common";
 import {useAuth} from "@/api/hooks/useAuth.ts";

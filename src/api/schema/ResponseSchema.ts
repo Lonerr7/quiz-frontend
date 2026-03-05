@@ -3,10 +3,8 @@ export interface SuccessResponse<T> {
   data: T;
 }
 
+type ErrorStatus = 'fail' | 'error';
 export interface ErrorResponse {
-  status: 'fail' | 'error';
+  status: ErrorStatus;
   message: string;
-  error: {
-    statusCode: number;
-  }
 }

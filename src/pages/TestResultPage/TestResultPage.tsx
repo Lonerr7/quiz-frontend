@@ -1,6 +1,6 @@
 import {PageWrapper} from '@/components/common/PageWrapper.tsx';
 import {useLocation, useNavigate} from 'react-router';
-import type {PassTestResponse} from '@/api/endpoints/testsEndpoints/TestsEndpointsSchema.ts';
+import type {PassTestResponse} from '@/api/endpoints/testsEndpoints/schema/TestsEndpointsSchema';
 import {Button} from '@/components/common';
 import {formatWordByCount} from '@/helpers/utils/formatWordByCount.ts';
 import {AnsweredQuestion} from '@/components/AnsweredQuestion/AnsweredQuestion.tsx';
@@ -13,10 +13,7 @@ export const TestResultPage = () => {
   return (
     <PageWrapper>
       {testResult ? (
-        <div className="py-8 px-4">
-          <Button className="mb-6" variant="outline" size="medium" onClick={() => navigate('/')}>
-            На главную страницу
-          </Button>
+        <div>
           <div className="mb-8">
             <div className="page-title">Результаты</div>
             <div className="text-center font-medium text-md">
@@ -31,7 +28,7 @@ export const TestResultPage = () => {
               })}
             </div>
           </div>
-          <ul className="flex flex-col gap-6">
+          <ul className="flex flex-col gap-6 mb-4">
             {testResult.result.map((answeredQuestion, i) => (
               <AnsweredQuestion
                 key={answeredQuestion._id}
@@ -44,6 +41,14 @@ export const TestResultPage = () => {
               />
             ))}
           </ul>
+          <div className="flex items-center flex-col gap-4 xs:flex-row">
+            <Button variant="outline" size="full" onClick={() => navigate('/')}>
+              Все тесты
+            </Button>
+            <Button size="full" onClick={() => navigate(`/tests/${testResult.testId}`)}>
+              Пройти еще раз
+            </Button>
+          </div>
         </div>
       ) : (
         <div>Тут ничего нет(</div>

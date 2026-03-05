@@ -2,7 +2,7 @@ import {normalizeData, type NormalizedData} from "../../helpers/normalizeData";
 import {apiSlice} from "@/api/slice/api";
 import type {SuccessResponse} from "@/api/schema/ResponseSchema";
 import type {RootState} from "@/redux/store.ts";
-import type {ITestBase, ITestForUser, PassTestResponse} from "@/api/endpoints/testsEndpoints/TestsEndpointsSchema.ts";
+import type {ITestBase, ITestForUser, PassTestResponse} from "@/api/endpoints/testsEndpoints/schema/TestsEndpointsSchema.ts";
 import type {FetchBaseQueryError} from "@reduxjs/toolkit/query";
 
 const testsEndpoints = apiSlice.injectEndpoints({

@@ -1,5 +1,5 @@
 import {Button, Input, ErrorMessage, Label} from '@/components/common';
-import {useLogInMutation} from "@/api/endpoints/authEndpoints";
+import {useLogInMutation} from "@/api/endpoints/authEndpoints/authEndpoints";
 import {useForm} from "react-hook-form";
 import {useNavigate} from "react-router";
 import type {FC} from "react";
@@ -7,6 +7,7 @@ import {cn} from "@/helpers/utils/cn";
 import {toast} from "sonner";
 import {LogInSchema, type LogInSchemaType} from './LogInSchema';
 import {zodResolver} from "@hookform/resolvers/zod";
+import {handleApiError} from "@/api/helpers/handleApiError.ts";
 
 interface LogInFormProps {
   className?: string;
@@ -25,10 +26,8 @@ export const LogInForm: FC<LogInFormProps> = ({className}) => {
       navigate('/');
       toast.dismiss();
       toast.success('Successfully logged in!');
-    } catch (err: any) {
-      if (err.data.message) {
-        toast.error(err.data.message, {duration: 7000});
-      }
+    } catch (err: unknown) {
+      handleApiError(err);
     }
   }
 

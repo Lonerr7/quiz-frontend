@@ -1,4 +1,4 @@
-import {useGetMeQuery} from "@/api/endpoints/authEndpoints.ts";
+import {useGetMeQuery} from "@/api/endpoints/authEndpoints/authEndpoints";
 
 export const useAuth = () => {
   return useGetMeQuery(undefined, {

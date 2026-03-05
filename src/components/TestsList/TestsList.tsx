@@ -1,12 +1,14 @@
 import {useGetTestsQuery} from "@/api/endpoints/testsEndpoints/testsEndpoints.ts";
 import {TestItemSm} from "@/components/TestsList/TestItemSm.tsx";
 import {useAuth} from "@/api/hooks/useAuth.ts";
+import {handleApiError} from "@/api/helpers/handleApiError.ts";
 
 export const TestsList = () => {
-  const {data: tests, isError, isLoading} = useGetTestsQuery();
+  const {data: tests, isError, isLoading, error} = useGetTestsQuery();
   const {isLoading: isMeLoading, me} = useAuth();
 
-  if (isError) {
+  if (isError && error) {
+    handleApiError(error);
     return <div>Ошибка загрузки тестов</div>
   }
 

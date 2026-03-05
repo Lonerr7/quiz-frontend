@@ -1,5 +1,6 @@
 import {API_TAGS, apiSlice} from "@/api/slice/api";
 import type {SuccessResponse} from "@/api/schema/ResponseSchema";
+import type {IUser, LoginData} from './schema/AuthEndpointsSchema';
 
 const authEndpoints = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -35,18 +36,5 @@ const authEndpoints = apiSlice.injectEndpoints({
     })
   }),
 });
-
-
-export type UserRoles = 'user' | 'admin';
-export interface IUser {
-  _id: string;
-  name: string;
-  role: UserRoles;
-}
-
-export interface LoginData {
-  name: string;
-  password: string;
-}
 
 export const {useGetMeQuery, useLogInMutation, useLogOutMutation} = authEndpoints;

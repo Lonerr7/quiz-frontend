@@ -1,6 +1,6 @@
 import {Button, Spinner} from "@/components/common";
 import {useSubmitTestMutation} from "@/api/endpoints/testsEndpoints/testsEndpoints.ts";
-import type {ITestForUser} from "@/api/endpoints/testsEndpoints/TestsEndpointsSchema.ts";
+import type {ITestForUser} from "@/api/endpoints/testsEndpoints/schema/TestsEndpointsSchema.ts";
 import {type FC, type RefObject, useMemo, useRef, useState} from "react";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks/reduxHooks.ts";
 import {getPassTestAnswers} from "@/redux/slices/passTestSlice/selectors/getPassTestAnswers.ts";
@@ -8,6 +8,8 @@ import {useNavigate} from "react-router";
 import {findUnansweredQuestion} from '../helpers/findUnansweredQuestion.ts';
 import {ConfirmDialog} from "@/components/ConfirmDialog/ConfirmDialog.tsx";
 import {passTestSliceActions} from "@/redux/slices/passTestSlice/slice/passTestSlice.ts";
+import {toast} from 'sonner';
+import {handleApiError} from "@/api/helpers/handleApiError.ts";
 
 interface SubmitPassedTestControlsProps {
   testFromServer: ITestForUser | undefined;
@@ -33,10 +35,12 @@ export const SubmitPassedTestControls: FC<SubmitPassedTestControlsProps> = ({tes
   }, [testFromServer]);
 
   const finishTest = async () => {
-    const response = await submitTest();
-
-    if (response.data) {
-      navigate('/test-result', {state: {testResult: response.data}});
+    try {
+      const passedTest = await submitTest().unwrap();
+      toast.dismiss();
+      navigate('/test-result', {state: {testResult: passedTest}});
+    } catch (err: any) {
+      handleApiError(err);
     }
   }
 

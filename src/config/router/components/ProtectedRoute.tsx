@@ -1,8 +1,8 @@
 import {type FC, type ReactNode} from "react";
-import {type UserRoles} from "@/api/endpoints/authEndpoints";
 import {Button} from "@/components/common";
 import {Link} from "react-router";
 import {useAuth} from "@/api/hooks/useAuth.ts";
+import type {UserRoles} from "@/api/endpoints/authEndpoints/schema/AuthEndpointsSchema.ts";
 
 interface ProtectedRouteProps {
   children: ReactNode;

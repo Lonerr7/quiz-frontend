@@ -8,22 +8,16 @@ import {QuestionWithAnswers} from "@/components";
 import {Button} from "@/components/common";
 import {SubmitPassedTestControls} from "./components/SubmitPassedTestControls";
 import {getUnansweredQuestion} from "@/redux/slices/passTestSlice/selectors/getUnansweredQuestion.ts";
+import {handleApiError} from "@/api/helpers/handleApiError.ts";
 
 export const PassTestPage = () => {
   const {id} = useParams();
   const navigate = useNavigate();
-  const {data: test, isLoading, isError} = useGetTestQuery(id!);
+  const {data: test, isLoading, isError, error: getTestError} = useGetTestQuery(id!);
   const unansweredQuestion = useAppSelector(getUnansweredQuestion);
   const questionRefs = useRef<Map<string, HTMLLIElement>>(new Map());
   const dispatch = useAppDispatch();
   const {setTestId, setAnswer, resetState, setUnansweredQuestion} = passTestSliceActions;
-
-  /*
-    TODO:
-    3. Отобразить ошибку при сабмите теста на сервер (если будет) и не редиректить пользователя на страницу ответов при этом
-    4. Перенести все остальные типы из endpoints в свои файлы схемы.
-    5. Типизировать все ошибки из RTK Query
-   */
 
   useEffect(() => {
     if (!isError && test) {
@@ -45,8 +39,13 @@ export const PassTestPage = () => {
     return <div>Загрузка теста...</div>
   }
 
-  if (isError) {
-    return <div>Ошибка загрузки теста...</div>
+  if (isError && getTestError) {
+    handleApiError(getTestError);
+    return (
+      <PageWrapper>
+        <div>Ошибка загрузки теста...</div>
+      </PageWrapper>
+    )
   }
 
   return (
