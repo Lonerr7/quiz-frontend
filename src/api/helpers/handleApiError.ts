@@ -1,10 +1,13 @@
-import {toast} from "sonner";
-import {isFetchBaseQueryError} from "./defineApiErrorType";
-import type {ErrorResponse} from "@/api/schema/ResponseSchema.ts";
+import {toast} from 'sonner';
+import {isFetchBaseQueryError} from './defineApiErrorType';
+import type {ErrorResponse} from '@/api/schema/ResponseSchema.ts';
 
 export const handleApiError = (err: unknown) => {
   if (isFetchBaseQueryError(err)) {
-    const apiError= err.data as ErrorResponse;
+    const apiError = err.data as ErrorResponse;
     toast.error(apiError.message);
+  } else {
+    toast.error('Error! Try again later');
+    console.error(err);
   }
-}
+};

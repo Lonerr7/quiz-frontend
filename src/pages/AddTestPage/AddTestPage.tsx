@@ -1,6 +1,10 @@
-export const AddTestPage = () => {
+import {PageWrapper} from "@/components/common/PageWrapper.tsx";
+import {TestEditorForm} from "@/components/TestEditorForm/TestEditorForm.tsx";
 
+export const AddTestPage = () => {
   return (
-    <div>AddTestPage</div>
+    <PageWrapper>
+      <TestEditorForm/>
+    </PageWrapper>
   )
 }
