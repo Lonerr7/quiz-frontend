@@ -1,5 +1,5 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
-import type {TestEditorSliceInitialState} from '../schema/TestEditorSliceSchema';
+import type {Question, TestEditorSliceInitialState} from '../schema/TestEditorSliceSchema';
 
 const initialState: TestEditorSliceInitialState = {
   id: null,
@@ -17,6 +17,9 @@ const testEditorSlice = createSlice({
     },
     changeTestDescription: (state, action: PayloadAction<string>) => {
       state.description = action.payload;
+    },
+    addQuestion: (state, action: PayloadAction<Question>) => {
+      state.questions.push(action.payload);
     },
     resetState: () => initialState,
   },

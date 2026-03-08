@@ -4,11 +4,14 @@ import {getTestName} from '@/redux/slices/testEditorSlice/selectors/getTestName.
 import {testEditorSliceActions} from '@/redux/slices/testEditorSlice/slice/testEditorSlice.ts';
 import {Textarea} from '@/components/common/Textarea.tsx';
 import {getTestDescription} from '@/redux/slices/testEditorSlice/selectors/getTestDescription.ts';
-import {AddQuestionDialog} from "@/components";
+import {AddQuestionDialog} from '@/components';
+import {getTestQuestions} from '@/redux/slices/testEditorSlice/selectors/getTestQuestions.ts';
+import {EditTestQuestionsList} from '@/components/EditTestQuestionsList/EditTestQuestionsList.tsx';
 
 export const TestEditorForm = () => {
   const testName = useAppSelector(getTestName);
   const testDescription = useAppSelector(getTestDescription);
+  const testQuestions = useAppSelector(getTestQuestions);
   const dispatch = useAppDispatch();
   const {changeTestName, changeTestDescription} = testEditorSliceActions;
 
@@ -32,9 +35,11 @@ export const TestEditorForm = () => {
       </div>
       <div>
         <div className="font-semibold">Вопросы</div>
-        <div>Questions List</div>
+        <EditTestQuestionsList questions={testQuestions} />
         <AddQuestionDialog>
-          <Button variant="outline">Добавить вопрос</Button>
+          <Button className="mt-5" variant="outline" size="full">
+            Добавить вопрос
+          </Button>
         </AddQuestionDialog>
       </div>
     </form>

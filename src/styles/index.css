@@ -53,7 +53,7 @@
   }
 
   .test-card {
-    @apply flex flex-col bg-surface p-6 rounded-2xl border border-border shadow-sm;
+    @apply flex flex-col bg-surface p-6 rounded-2xl border border-border transition-all shadow-sm;
   }
 
   .question-title {

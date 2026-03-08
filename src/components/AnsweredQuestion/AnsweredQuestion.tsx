@@ -16,10 +16,10 @@ export const AnsweredQuestion: FC<AnsweredQuestionProps> = (props) => {
 
   return (
     <li className={cn(
-      "test-card border-l-4 transition-all",
+      "test-card border-l-4",
       isCorrect ? "border-l-success/70" : "border-l-error/70"
     )}>
-      <div className="flex items-start justify-between flex-col-reverse md:flex-row gap-4 mb-5">
+      <div className="flex items-center justify-between flex-col-reverse md:flex-row gap-4 mb-5">
         <div className="question-title mb-0">
           {questionNumber ? <span className="opacity-50 mr-2">{questionNumber}.</span> : null}
           <span>{questionText}</span>
