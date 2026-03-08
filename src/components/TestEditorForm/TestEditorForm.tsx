@@ -34,7 +34,6 @@ export const TestEditorForm = () => {
         />
       </div>
       <div>
-        <div className="font-semibold">Вопросы</div>
         <EditTestQuestionsList questions={testQuestions} />
         <AddQuestionDialog>
           <Button className="mt-5" variant="outline" size="full">

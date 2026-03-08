@@ -7,15 +7,18 @@ import {
 } from '@/components/common/Dialog';
 import {Button} from '@/components/common';
 import type {FC} from 'react';
-import {VisuallyHidden} from "@radix-ui/react-visually-hidden";
-import {cn} from "@/helpers/utils/cn.ts";
+import {VisuallyHidden} from '@radix-ui/react-visually-hidden';
+import {cn} from '@/helpers/utils/cn.ts';
+import type {ButtonVariantsType} from "@/components/common/Button.tsx";
 
 export interface ConfirmDialogProps {
   className?: string;
   open: boolean;
   title?: string;
   description?: string;
+  confirmButtonVariant?: ButtonVariantsType;
   onConfirm: () => void;
+  onOpenChange?: () => void;
 }
 
 export const ConfirmDialog: FC<ConfirmDialogProps> = ({
@@ -23,11 +26,19 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
   open,
   title = 'Внимание',
   description,
+  confirmButtonVariant = 'default',
   onConfirm,
+  onOpenChange,
 }) => {
   return (
-    <Dialog open={open} onOpenChange={onConfirm}>
-      <DialogContent className={cn('flex flex-col gap-6 border-none shadow-2xl', className)}>
+    <Dialog open={open} onOpenChange={() => {
+      if (onOpenChange) {
+        onOpenChange();
+      }
+    }}>
+      <DialogContent
+        className={cn('flex flex-col gap-6 border-none shadow-2xl', className)}
+      >
         <div className="flex flex-col gap-2">
           <DialogTitle className="md:text-2xl font-bold text-text-main mb-0">{title}</DialogTitle>
           {description ? (
@@ -36,13 +47,13 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
             </DialogDescription>
           ) : (
             <VisuallyHidden>
-              <DialogDescription/>
+              <DialogDescription />
             </VisuallyHidden>
           )}
         </div>
         <DialogFooter>
           <div className="flex gap-3 sm:justify-end mt-2">
-            <Button size="sm" onClick={onConfirm}>
+            <Button variant={confirmButtonVariant} size="sm" onClick={onConfirm}>
               ОК
             </Button>
           </div>

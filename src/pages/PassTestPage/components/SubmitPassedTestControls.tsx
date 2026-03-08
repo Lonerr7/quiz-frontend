@@ -83,6 +83,7 @@ export const SubmitPassedTestControls: FC<SubmitPassedTestControlsProps> = ({tes
         open={isSubmitDialogOpen}
         description="Вы не ответили на все вопросы!"
         onConfirm={handleCloseModalWithScroll}
+        onOpenChange={handleCloseModalWithScroll}
       />
     </div>
   )

@@ -29,7 +29,6 @@ export const PassTestPage = () => {
     };
   }, [test]);
 
-
   const handleAnswerSelect = (qId: string, answer: string) => {
     dispatch(setAnswer({qId, answer: Number(answer)}));
     dispatch(setUnansweredQuestion(null));

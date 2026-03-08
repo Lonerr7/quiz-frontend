@@ -158,9 +158,9 @@ export const AddQuestionDialog: FC<AddQuestionDialogProps> = ({children}) => {
                         <Check size={18} strokeWidth={3} />
                       </Button>
                       <Button
-                        className="px-3 text-text-muted hover:text-error hover:bg-error/5 border-transparent"
+                        className="px-3"
                         type="button"
-                        variant="ghost_primary"
+                        variant="danger"
                         onClick={() => handleRemoveOption(i)}
                       >
                         <Trash2 size={18} />
@@ -206,7 +206,7 @@ export const AddQuestionDialog: FC<AddQuestionDialogProps> = ({children}) => {
             >
               Закрыть
             </Button>
-            <Button className="w-full sm:w-auto order-1 sm:order-2 px-8">Сохранить вопрос</Button>
+            <Button className="w-full sm:w-auto order-1 sm:order-2 px-8">Добавить</Button>
           </div>
         </form>
       </DialogContent>

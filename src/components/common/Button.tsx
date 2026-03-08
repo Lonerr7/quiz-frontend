@@ -4,24 +4,26 @@ import { cn } from '@/helpers/utils/cn';
 import type { FC } from "react";
 import { Slot } from "@radix-ui/react-slot";
 
+const buttonVariantOptions = {
+  default:
+    "bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:ring-primary",
+  secondary:
+    "bg-secondary text-secondary-foreground hover:bg-secondary-hover focus-visible:ring-secondary",
+  outline:
+    "bg-transparent border border-border text-text-main hover:bg-bg-main hover:border-text-muted",
+  ghost_primary:
+    "bg-white/10 hover:bg-white/20 border border-white/30 px-4 py-1.5 rounded-md font-medium transition-colors disabled:opacity-75 inline-block",
+  ghost_secondary:
+    "bg-transparent text-text-muted hover:bg-primary-light hover:text-primary",
+  danger:
+    "bg-error text-white hover:opacity-90 focus-visible:ring-error",
+}
+
 const buttonVariants = cva(
   'inline-flex items-center justify-center transition-all duration-200 cursor-pointer disabled:opacity-80 disabled:pointer-events-none outline-none ring-offset-2 focus-visible:ring-2 active:scale-[0.98] font-open-sans',
   {
     variants: {
-      variant: {
-        default:
-          "bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:ring-primary",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary-hover focus-visible:ring-secondary",
-        outline:
-          "bg-transparent border border-border text-text-main hover:bg-bg-main hover:border-text-muted",
-        ghost_primary:
-          "bg-white/10 hover:bg-white/20 border border-white/30 px-4 py-1.5 rounded-md font-medium transition-colors disabled:opacity-75 inline-block",
-        ghost_secondary:
-          "bg-transparent text-text-muted hover:bg-primary-light hover:text-primary",
-        danger:
-          "bg-error text-white hover:opacity-90 focus-visible:ring-error",
-      },
+      variant: buttonVariantOptions,
       size: {
         sm: "h-9 px-3 text-sm rounded-md",
         medium: "h-11 px-6 text-base font-semibold rounded-lg",
@@ -35,6 +37,8 @@ const buttonVariants = cva(
     }
   }
 );
+
+export type ButtonVariantsType = keyof typeof buttonVariantOptions;
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   asChild?: boolean;
