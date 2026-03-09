@@ -32,6 +32,7 @@ export default defineConfig([
       }], // Использовать это
       '@typescript-eslint/no-explicit-any': 'off',
       'react/jsx-key': 'error',
+      'react-hooks/set-state-in-effect': 'off'
     }
   },
 ])

@@ -1,0 +1,1 @@
+export const transformQuestionOptions = (options: string[]) => options.map((option) => ({value: option}))

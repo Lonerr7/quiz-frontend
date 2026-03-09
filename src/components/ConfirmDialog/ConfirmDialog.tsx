@@ -17,6 +17,7 @@ export interface ConfirmDialogProps {
   title?: string;
   description?: string;
   confirmButtonVariant?: ButtonVariantsType;
+  confirmButtonText?: string;
   onConfirm: () => void;
   onOpenChange?: () => void;
 }
@@ -27,6 +28,7 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
   title = 'Внимание',
   description,
   confirmButtonVariant = 'default',
+  confirmButtonText = 'ОК',
   onConfirm,
   onOpenChange,
 }) => {
@@ -54,7 +56,7 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
         <DialogFooter>
           <div className="flex gap-3 sm:justify-end mt-2">
             <Button variant={confirmButtonVariant} size="sm" onClick={onConfirm}>
-              ОК
+              {confirmButtonText}
             </Button>
           </div>
         </DialogFooter>

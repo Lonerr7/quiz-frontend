@@ -1,0 +1,184 @@
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/common/Dialog.tsx';
+import {VisuallyHidden} from '@radix-ui/react-visually-hidden';
+import {Button, ErrorMessage, Input, Label} from '@/components/common';
+import {cn} from '@/helpers/utils/cn.ts';
+import {Check, Plus, Trash2} from 'lucide-react';
+import type {BaseSyntheticEvent, FC, ReactNode} from 'react';
+import type {UseFormReturn, FieldArrayWithId} from 'react-hook-form';
+import type {QuestionValidationSchemaType} from '@/redux/slices/testEditorSlice/schema/QuestionValidationSchema.ts';
+
+interface QuestionConfigurationProps {
+  children: ReactNode;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  form: UseFormReturn<QuestionValidationSchemaType>;
+  options: FieldArrayWithId<QuestionValidationSchemaType, 'options'>[];
+  correctAnswer: number | null;
+  handleSetCorrectAnswer: (index: number) => void;
+  handleAddOption: () => void;
+  handleRemoveOption: (index: number) => void;
+  onSubmit: (e?: BaseSyntheticEvent) => Promise<void>; // Это результат handleSubmit
+  correctAnswerError: string | null;
+  title: string;
+  submitBtnText: string;
+}
+
+export const QuestionConfiguration: FC<QuestionConfigurationProps> = (props) => {
+  const {
+    children,
+    isOpen,
+    setIsOpen,
+    form,
+    options,
+    correctAnswer,
+    handleSetCorrectAnswer,
+    handleAddOption,
+    handleRemoveOption,
+    onSubmit,
+    title,
+    submitBtnText,
+    correctAnswerError,
+  } = props;
+  const {
+    register,
+    formState: {errors},
+  } = form;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className="w-[95%] md:max-w-[700px] p-8 gap-8 max-h-[90vh] overflow-y-auto">
+        <div className="flex flex-col gap-1 mb-8">
+          <DialogTitle className="text-2xl font-bold text-text-main">{title}</DialogTitle>
+        </div>
+
+        <VisuallyHidden>
+          <DialogDescription />
+        </VisuallyHidden>
+
+        <form className="flex flex-col gap-8" onSubmit={onSubmit}>
+          <div className="form-control gap-2.5">
+            <Label
+              htmlFor="questionText"
+              className="text-sm font-bold uppercase tracking-wider opacity-70"
+            >
+              Текст вопроса
+            </Label>
+            <Input className="text-lg py-6 px-4" {...register('questionText')} id="questionText" />
+            {errors.questionText && (
+              <ErrorMessage className="mt-1">{errors.questionText.message}</ErrorMessage>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-bold uppercase tracking-wider opacity-70">
+                Варианты ответа
+              </span>
+              <span className="text-xs text-text-muted italic">
+                {options.length > 0
+                  ? `Всего: ${options.length}`
+                  : 'Добавьте варианты ответов (минимум 2)'}
+              </span>
+            </div>
+
+            <ul className="flex flex-col gap-3">
+              {options.map((option, i) => (
+                <li
+                  key={option.id}
+                  className={cn(
+                    'flex items-center gap-3 p-3 rounded-xl border transition-all duration-200',
+                    i === correctAnswer
+                      ? 'bg-primary/5 border-primary shadow-sm'
+                      : 'bg-bg-main border-transparent',
+                  )}
+                >
+                  <div className="flex-1">
+                    <div className="flex gap-2">
+                      <div className="flex-1 flex items-center gap-2.5">
+                        <Label className="text-xs font-bold text-text-muted w-4" htmlFor={`${i}`}>
+                          {i + 1}.
+                        </Label>
+                        <Input
+                          className="w-full bg-surface border-input-border focus:border-primary transition-colors"
+                          {...register(`options.${i}.value` as const)}
+                          id={`${i}`}
+                          placeholder={`Вариант ${i + 1}`}
+                        />
+                      </div>
+                      <Button
+                        type="button"
+                        variant={i === correctAnswer ? 'default' : 'outline'}
+                        className={cn(
+                          'px-3 transition-all',
+                          i === correctAnswer
+                            ? 'bg-primary text-white'
+                            : 'text-text-muted hover:text-primary',
+                        )}
+                        onClick={() => handleSetCorrectAnswer(i)}
+                        title="Отметить как правильный"
+                      >
+                        <Check size={18} strokeWidth={3} />
+                      </Button>
+                      <Button
+                        className="px-3"
+                        type="button"
+                        variant="danger"
+                        onClick={() => handleRemoveOption(i)}
+                      >
+                        <Trash2 size={18} />
+                      </Button>
+                    </div>
+                    {errors.options && errors.options[i] && (
+                      <ErrorMessage className="mt-2.5 ml-[27px]">
+                        {errors.options[i].value?.message}
+                      </ErrorMessage>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <Button
+              className="w-fit border-dashed border-2 hover:border-primary hover:text-primary py-5 px-8 rounded-xl"
+              variant="outline"
+              size="sm"
+              type="button"
+              onClick={handleAddOption}
+            >
+              <Plus size={18} className="mr-2" />
+              Добавить вариант
+            </Button>
+
+            {errors.options?.root ? (
+              <ErrorMessage>{errors.options.root.message}</ErrorMessage>
+            ) : errors.options?.message ? (
+              <ErrorMessage>{errors.options.message}</ErrorMessage>
+            ) : null}
+            {correctAnswerError && (
+              <ErrorMessage className="mt-2.5">{correctAnswerError}</ErrorMessage>
+            )}
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-end mt-8 gap-3 pt-4">
+            <Button
+              className="w-full sm:w-auto order-2 sm:order-1"
+              variant="outline"
+              type="button"
+              onClick={() => setIsOpen(false)}
+            >
+              Закрыть
+            </Button>
+            <Button className="w-full sm:w-auto order-1 sm:order-2 px-8">{submitBtnText}</Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};

@@ -21,6 +21,11 @@ const testEditorSlice = createSlice({
     addQuestion: (state, action: PayloadAction<Question>) => {
       state.questions.push(action.payload);
     },
+    editQuestion: (state, action: PayloadAction<{questionIndex: number; question: Question}>) => {
+      const {questionIndex, question} = action.payload;
+
+      state.questions[questionIndex] = {...question};
+    },
     deleteQuestion: (state, action: PayloadAction<number>) => {
       state.questions = state.questions.filter((_, i) => i !== action.payload);
     },

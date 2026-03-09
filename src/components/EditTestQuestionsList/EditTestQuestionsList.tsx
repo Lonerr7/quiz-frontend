@@ -2,10 +2,11 @@ import {type FC, useRef, useState} from 'react';
 import type {Question} from '@/redux/slices/testEditorSlice/schema/TestEditorSliceSchema.ts';
 import {cn} from '@/helpers/utils/cn.ts';
 import {Button} from '@/components/common';
-import {Trash2} from 'lucide-react';
+import {SquarePen, Trash2} from 'lucide-react';
 import {ConfirmDialog} from '@/components/ConfirmDialog/ConfirmDialog.tsx';
-import {useAppDispatch} from "@/redux/hooks/reduxHooks.ts";
-import {testEditorSliceActions} from "@/redux/slices/testEditorSlice/slice/testEditorSlice.ts";
+import {useAppDispatch} from '@/redux/hooks/reduxHooks.ts';
+import {testEditorSliceActions} from '@/redux/slices/testEditorSlice/slice/testEditorSlice.ts';
+import {EditQuestionDialog} from '@/components/EditQuestionDialog/EditQuestionDialog.tsx';
 
 interface EditTestQuestionsListProps {
   questions: Question[];
@@ -32,7 +33,7 @@ export const EditTestQuestionsList: FC<EditTestQuestionsListProps> = ({questions
       dispatch(deleteQuestion(questionToDelete.current));
     }
     handleCloseConfirmDialog();
-  }
+  };
 
   return (
     <div>
@@ -61,6 +62,16 @@ export const EditTestQuestionsList: FC<EditTestQuestionsListProps> = ({questions
                     >
                       <Trash2 size={18} />
                     </Button>
+                    <EditQuestionDialog
+                      questionIndex={questionIndex}
+                      initialQuestionText={question.text}
+                      initialOptions={question.options}
+                      initialCorrectAnswer={question.correctAnswer}
+                    >
+                      <Button className="px-3" variant="outline" type="button">
+                        <SquarePen size={18} />
+                      </Button>
+                    </EditQuestionDialog>
                   </div>
                 </div>
 
@@ -82,8 +93,8 @@ export const EditTestQuestionsList: FC<EditTestQuestionsListProps> = ({questions
                         <span className="flex-1 font-semibold">{option}</span>
                         {isCorrect && (
                           <span className="text-[10px] font-bold uppercase opacity-60 ml-2">
-                          Верный ответ
-                        </span>
+                            Верный ответ
+                          </span>
                         )}
                       </li>
                     );
@@ -101,6 +112,7 @@ export const EditTestQuestionsList: FC<EditTestQuestionsListProps> = ({questions
         description="Вы точно хотите удалить этот вопрос? Это действие нельзя отменить"
         open={isConfirmDialogOpen}
         confirmButtonVariant="danger"
+        confirmButtonText="Удалить"
         onOpenChange={handleCloseConfirmDialog}
         onConfirm={handleDeleteQuestion}
       />
