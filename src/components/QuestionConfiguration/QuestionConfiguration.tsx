@@ -58,7 +58,7 @@ export const QuestionConfiguration: FC<QuestionConfigurationProps> = (props) => 
           <DialogDescription />
         </VisuallyHidden>
 
-        <form className="flex flex-col gap-8" onSubmit={onSubmit}>
+        <form className="flex flex-col gap-8">
           <div className="form-control gap-2.5">
             <Label
               htmlFor="questionText"
@@ -171,7 +171,13 @@ export const QuestionConfiguration: FC<QuestionConfigurationProps> = (props) => 
             >
               Закрыть
             </Button>
-            <Button className="w-full sm:w-auto order-1 sm:order-2 px-8">{submitBtnText}</Button>
+            <Button
+              className="w-full sm:w-auto order-1 sm:order-2 px-8"
+              type="button"
+              onClick={onSubmit}
+            >
+              {submitBtnText}
+            </Button>
           </div>
         </form>
       </DialogContent>

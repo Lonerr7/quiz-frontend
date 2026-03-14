@@ -15,7 +15,7 @@ export const TestsList = () => {
   return (
     <>
       {tests && !isLoading && !isMeLoading ? (
-        <ul>
+        <ul className="flex flex-col gap-3.5">
           {tests.ids.map((testId) => (
             <TestItemSm key={testId} test={tests.entities[testId]} me={me}/>
           ))}
