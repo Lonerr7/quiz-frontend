@@ -13,6 +13,7 @@ interface EditTestQuestionsListProps {
 }
 
 export const EditTestQuestionsList: FC<EditTestQuestionsListProps> = ({questions}) => {
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const questionToDelete = useRef<number | null>(null);
   const dispatch = useAppDispatch();
@@ -62,16 +63,24 @@ export const EditTestQuestionsList: FC<EditTestQuestionsListProps> = ({questions
                     >
                       <Trash2 size={18} />
                     </Button>
-                    <EditQuestionDialog
-                      questionIndex={questionIndex}
-                      initialQuestionText={question.text}
-                      initialOptions={question.options}
-                      initialCorrectAnswer={question.correctAnswer}
+                    <Button
+                      className="px-3"
+                      variant="outline"
+                      type="button"
+                      onClick={() => setIsEditDialogOpen(true)}
                     >
-                      <Button className="px-3" variant="outline" type="button">
-                        <SquarePen size={18} />
-                      </Button>
-                    </EditQuestionDialog>
+                      <SquarePen size={18} />
+                    </Button>
+                    {isEditDialogOpen && (
+                      <EditQuestionDialog
+                        isOpen={isEditDialogOpen}
+                        setIsOpen={setIsEditDialogOpen}
+                        questionIndex={questionIndex}
+                        initialQuestionText={question.text}
+                        initialOptions={question.options}
+                        initialCorrectAnswer={question.correctAnswer}
+                      />
+                    )}
                   </div>
                 </div>
 

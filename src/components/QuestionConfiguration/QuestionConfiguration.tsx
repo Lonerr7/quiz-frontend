@@ -3,18 +3,16 @@ import {
   DialogContent,
   DialogDescription,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/common/Dialog.tsx';
 import {VisuallyHidden} from '@radix-ui/react-visually-hidden';
 import {Button, ErrorMessage, Input, Label} from '@/components/common';
 import {cn} from '@/helpers/utils/cn.ts';
 import {Check, Plus, Trash2} from 'lucide-react';
-import type {BaseSyntheticEvent, FC, ReactNode} from 'react';
+import type {BaseSyntheticEvent, FC} from 'react';
 import type {UseFormReturn, FieldArrayWithId} from 'react-hook-form';
 import type {QuestionValidationSchemaType} from '@/redux/slices/testEditorSlice/schema/QuestionValidationSchema.ts';
 
 interface QuestionConfigurationProps {
-  children: ReactNode;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   form: UseFormReturn<QuestionValidationSchemaType>;
@@ -31,7 +29,6 @@ interface QuestionConfigurationProps {
 
 export const QuestionConfiguration: FC<QuestionConfigurationProps> = (props) => {
   const {
-    children,
     isOpen,
     setIsOpen,
     form,
@@ -52,7 +49,6 @@ export const QuestionConfiguration: FC<QuestionConfigurationProps> = (props) => 
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="w-[95%] md:max-w-[700px] p-8 gap-8 max-h-[90vh] overflow-y-auto">
         <div className="flex flex-col gap-1 mb-8">
           <DialogTitle className="text-2xl font-bold text-text-main">{title}</DialogTitle>

@@ -1,4 +1,4 @@
-import {type FC, type ReactNode, useState} from 'react';
+import {type Dispatch, type FC, type SetStateAction, useState} from 'react';
 import {useFieldArray, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {
@@ -11,11 +11,11 @@ import {prepareOptionsForSave} from '@/redux/slices/testEditorSlice/utils/prepar
 import {QuestionConfiguration} from '@/components/QuestionConfiguration/QuestionConfiguration.tsx';
 
 interface AddQuestionDialogProps {
-  children: ReactNode;
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AddQuestionDialog: FC<AddQuestionDialogProps> = ({children}) => {
-  const [isOpen, setIsOpen] = useState(false);
+export const AddQuestionDialog: FC<AddQuestionDialogProps> = ({isOpen, setIsOpen}) => {
   const [correctAnswer, setCorrectAnswer] = useState<number | null>(null);
   const [correctAnswerError, setCorrectAnswerError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
@@ -30,7 +30,7 @@ export const AddQuestionDialog: FC<AddQuestionDialogProps> = ({children}) => {
     remove: removeOption,
   } = useFieldArray({
     name: 'options',
-    control: form.control
+    control: form.control,
   });
 
   const addOption = () => {
@@ -91,8 +91,6 @@ export const AddQuestionDialog: FC<AddQuestionDialogProps> = ({children}) => {
       correctAnswerError={correctAnswerError}
       title="Добавить вопрос"
       submitBtnText="Добавить"
-    >
-      {children}
-    </QuestionConfiguration>
+    />
   );
 };

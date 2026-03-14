@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {Button, Input, Label} from '@/components/common';
 import {useAppDispatch, useAppSelector} from '@/redux/hooks/reduxHooks.ts';
 import {getTestName} from '@/redux/slices/testEditorSlice/selectors/getTestName.ts';
@@ -12,6 +13,7 @@ export const TestEditorForm = () => {
   const testName = useAppSelector(getTestName);
   const testDescription = useAppSelector(getTestDescription);
   const testQuestions = useAppSelector(getTestQuestions);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const dispatch = useAppDispatch();
   const {changeTestName, changeTestDescription} = testEditorSliceActions;
 
@@ -35,12 +37,20 @@ export const TestEditorForm = () => {
       </div>
       <div>
         <EditTestQuestionsList questions={testQuestions} />
-        <AddQuestionDialog>
-          <Button className="mt-5" variant="outline" size="full">
-            Добавить вопрос
-          </Button>
-        </AddQuestionDialog>
+        <Button
+          className="mt-5"
+          type="button"
+          variant="outline"
+          size="full"
+          onClick={() => setIsAddDialogOpen(true)}
+        >
+          Добавить вопрос
+        </Button>
       </div>
+
+      {isAddDialogOpen && (
+        <AddQuestionDialog isOpen={isAddDialogOpen} setIsOpen={setIsAddDialogOpen}/>
+      )}
     </form>
   );
 };

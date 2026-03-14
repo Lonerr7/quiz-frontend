@@ -1,4 +1,4 @@
-import {type FC, type ReactNode, useEffect, useState} from 'react';
+import {type Dispatch, type FC, type SetStateAction, useEffect, useState} from 'react';
 import {useFieldArray, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {
@@ -12,7 +12,8 @@ import {transformQuestionOptions} from '@/redux/slices/testEditorSlice/utils/tra
 import {QuestionConfiguration} from '@/components/QuestionConfiguration/QuestionConfiguration.tsx';
 
 interface EditQuestionDialogProps {
-  children: ReactNode;
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
   questionIndex: number;
   initialQuestionText: string;
   initialOptions: string[];
@@ -20,8 +21,7 @@ interface EditQuestionDialogProps {
 }
 
 export const EditQuestionDialog: FC<EditQuestionDialogProps> = (props) => {
-  const {children, questionIndex, initialQuestionText, initialOptions, initialCorrectAnswer} = props;
-  const [isOpen, setIsOpen] = useState(false);
+  const {isOpen, setIsOpen, questionIndex, initialQuestionText, initialOptions, initialCorrectAnswer} = props;
   const [correctAnswer, setCorrectAnswer] = useState<number | null>(initialCorrectAnswer);
   const [correctAnswerError, setCorrectAnswerError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
@@ -112,8 +112,6 @@ export const EditQuestionDialog: FC<EditQuestionDialogProps> = (props) => {
       correctAnswerError={correctAnswerError}
       title="Редактировать вопрос"
       submitBtnText="Сохранить"
-    >
-      {children}
-    </QuestionConfiguration>
+    />
   );
 };
