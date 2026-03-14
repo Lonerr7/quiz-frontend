@@ -85,8 +85,16 @@ export const EditQuestionDialog: FC<EditQuestionDialogProps> = (props) => {
 
   const handleRemoveOption = (index: number) => {
     removeOption(index);
-    if (index === correctAnswer) {
-      setCorrectAnswer(null);
+
+    if (typeof correctAnswer === 'number') {
+      if (index === correctAnswer) {
+        setCorrectAnswer(null);
+        return;
+      }
+
+      if (correctAnswer - index === 1) {
+        setCorrectAnswer(index);
+      }
     }
   };
 
