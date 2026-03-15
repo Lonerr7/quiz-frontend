@@ -4,6 +4,7 @@ import type {SuccessResponse} from '@/api/schema/ResponseSchema';
 import type {RootState} from '@/redux/store.ts';
 import type {
   ITestBase,
+  ITestForAdmin,
   ITestForUser,
   PassTestResponse,
 } from '@/api/endpoints/testsEndpoints/schema/TestsEndpointsSchema.ts';
@@ -23,6 +24,14 @@ export const testsEndpoints = apiSlice.injectEndpoints({
       transformResponse: (response: SuccessResponse<{test: ITestForUser}>) => {
         return response.data.test;
       },
+      providesTags: (result, error, arg) => [{type: API_TAGS.TESTS, id: arg}]
+    }),
+    getTestForAdmin: builder.query<ITestForAdmin, string>({
+      query: (testId) => `/admin/tests/${testId}`,
+      transformResponse: (response: SuccessResponse<{test: ITestForAdmin}>) => {
+        return response.data.test;
+      },
+      providesTags: (result, error, arg) => [{type: API_TAGS.TESTS, id: arg}]
     }),
     submitTest: builder.mutation<PassTestResponse, void>({
       queryFn: async (arg, api, extraOptions, baseQuery) => {
@@ -67,15 +76,46 @@ export const testsEndpoints = apiSlice.injectEndpoints({
       },
       invalidatesTags: [API_TAGS.TESTS],
     }),
+    editTest: builder.mutation<ITestForAdmin, string>({
+      queryFn: async (arg, api, extraOptions, baseQuery) => {
+        const state = api.getState() as RootState;
+        const {name, description, questions} = state.testEditor;
+
+        const {data, error} = await baseQuery({
+          url: `/admin/tests/${arg}`,
+          method: 'PATCH',
+          body: {
+            name,
+            description,
+            questions,
+          },
+        });
+
+        if (error) {
+          return {error: error as FetchBaseQueryError};
+        }
+
+        const successResponse = data as SuccessResponse<ITestForAdmin>;
+        return {data: successResponse.data};
+      },
+      invalidatesTags: (result, error, arg) => [API_TAGS.TESTS, {type: API_TAGS.TESTS, id: arg}],
+    }),
     deleteTest: builder.mutation<null, string>({
       query: (testId) => ({
         url: `/admin/tests/${testId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: [API_TAGS.TESTS]
+      invalidatesTags: [API_TAGS.TESTS],
     }),
   }),
 });
 
-export const {useGetTestsQuery, useGetTestQuery, useSubmitTestMutation, useAddTestMutation, useDeleteTestMutation} =
-  testsEndpoints;
+export const {
+  useGetTestsQuery,
+  useGetTestQuery,
+  useGetTestForAdminQuery,
+  useSubmitTestMutation,
+  useAddTestMutation,
+  useEditTestMutation,
+  useDeleteTestMutation,
+} = testsEndpoints;

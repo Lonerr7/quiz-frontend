@@ -8,6 +8,10 @@ import {useAppDispatch} from '@/redux/hooks/reduxHooks.ts';
 import {testEditorSliceActions} from '@/redux/slices/testEditorSlice/slice/testEditorSlice.ts';
 import {EditQuestionDialog} from '@/components/EditQuestionDialog/EditQuestionDialog.tsx';
 
+interface QuestionToEdit extends Question {
+  index: number;
+}
+
 interface EditTestQuestionsListProps {
   questions: Question[];
 }
@@ -16,6 +20,7 @@ export const EditTestQuestionsList: FC<EditTestQuestionsListProps> = ({questions
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const questionToDelete = useRef<number | null>(null);
+  const [questionToEdit, setQuestionToEdit] = useState<QuestionToEdit | null>(null);
   const dispatch = useAppDispatch();
   const {deleteQuestion} = testEditorSliceActions;
 
@@ -35,6 +40,16 @@ export const EditTestQuestionsList: FC<EditTestQuestionsListProps> = ({questions
     }
     handleCloseConfirmDialog();
   };
+
+  const handleOpenEditDialog = (question: QuestionToEdit) => {
+    setQuestionToEdit({...question});
+    setIsEditDialogOpen(true);
+  };
+
+  const handleCloseEditDialog = () => {
+    setQuestionToEdit(null);
+    setIsEditDialogOpen(false);
+  }
 
   return (
     <div>
@@ -67,20 +82,10 @@ export const EditTestQuestionsList: FC<EditTestQuestionsListProps> = ({questions
                       className="px-3"
                       variant="outline"
                       type="button"
-                      onClick={() => setIsEditDialogOpen(true)}
+                      onClick={() => handleOpenEditDialog({...question, index: questionIndex})}
                     >
                       <SquarePen size={18} />
                     </Button>
-                    {isEditDialogOpen && (
-                      <EditQuestionDialog
-                        isOpen={isEditDialogOpen}
-                        setIsOpen={setIsEditDialogOpen}
-                        questionIndex={questionIndex}
-                        initialQuestionText={question.text}
-                        initialOptions={question.options}
-                        initialCorrectAnswer={question.correctAnswer}
-                      />
-                    )}
                   </div>
                 </div>
 
@@ -125,6 +130,17 @@ export const EditTestQuestionsList: FC<EditTestQuestionsListProps> = ({questions
         onOpenChange={handleCloseConfirmDialog}
         onConfirm={handleDeleteQuestion}
       />
+
+      {isEditDialogOpen && questionToEdit && (
+        <EditQuestionDialog
+          isOpen={isEditDialogOpen}
+          setIsOpen={handleCloseEditDialog}
+          questionIndex={questionToEdit.index}
+          initialQuestionText={questionToEdit.text}
+          initialOptions={questionToEdit.options}
+          initialCorrectAnswer={questionToEdit.correctAnswer}
+        />
+      )}
     </div>
   );
 };

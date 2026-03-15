@@ -4,7 +4,7 @@ import {TestEditorForm} from "@/components/TestEditorForm/TestEditorForm.tsx";
 export const AddTestPage = () => {
   return (
     <PageWrapper>
-      <TestEditorForm/>
+      <TestEditorForm mode="addTest"/>
     </PageWrapper>
   )
 }

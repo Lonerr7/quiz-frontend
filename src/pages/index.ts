@@ -3,3 +3,4 @@ export {LoginPage} from './LoginPage/LoginPage';
 export {NotFoundPage} from './NotFoundPage/NotFoundPage';
 export {TestsPage} from './TestsPage/TestsPage';
 export {TestResultPage} from './TestResultPage/TestResultPage';
+export {EditTestPage} from './EditTestPage/EditTestPage';

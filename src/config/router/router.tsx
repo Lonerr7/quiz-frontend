@@ -1,5 +1,5 @@
 import {createBrowserRouter} from "react-router";
-import {LoginPage, NotFoundPage, TestsPage, AddTestPage, TestResultPage} from "@/pages";
+import {LoginPage, NotFoundPage, TestsPage, AddTestPage, TestResultPage, EditTestPage} from "@/pages";
 import {ProtectedRoute} from "@/config/router/components/ProtectedRoute";
 import {Layout} from "@/components";
 import {PassTestPage} from "@/pages/PassTestPage/PassTestPage.tsx";
@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
         path: 'tests/:id/edit',
         element: (
           <ProtectedRoute allowedRoles={['admin']}>
-            <div>edit test</div>
+            <EditTestPage/>
           </ProtectedRoute>
         )
       },

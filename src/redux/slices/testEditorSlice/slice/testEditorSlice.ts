@@ -1,6 +1,7 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import type {Question, TestEditorSliceInitialState} from '../schema/TestEditorSliceSchema';
 import {testsEndpoints} from "@/api/endpoints/testsEndpoints/testsEndpoints.ts";
+import type {ITestForAdmin} from "@/api/endpoints/testsEndpoints/schema/TestsEndpointsSchema.ts";
 
 const initialState: TestEditorSliceInitialState = {
   id: null,
@@ -30,7 +31,15 @@ const testEditorSlice = createSlice({
     deleteQuestion: (state, action: PayloadAction<number>) => {
       state.questions = state.questions.filter((_, i) => i !== action.payload);
     },
-    resetState: () => initialState,
+    setTest: (state, action: PayloadAction<ITestForAdmin>) => {
+      const {_id, name, questions, description} = action.payload;
+
+      state.id = _id;
+      state.name = name;
+      state.questions = questions;
+      state.description = description;
+    },
+    resetState: () => initialState
   },
   extraReducers: builder => {
     builder.addMatcher(testsEndpoints.endpoints.addTest.matchFulfilled, () => initialState)
