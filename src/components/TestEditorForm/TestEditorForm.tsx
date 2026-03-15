@@ -11,6 +11,7 @@ import {EditTestQuestionsList} from '@/components/EditTestQuestionsList/EditTest
 import {useAddTestMutation} from "@/api/endpoints/testsEndpoints/testsEndpoints.ts";
 import {useNavigate} from "react-router";
 import {handleApiError} from "@/api/helpers/handleApiError.ts";
+import {toast} from "sonner";
 
 export const TestEditorForm = () => {
   const navigate = useNavigate();
@@ -52,6 +53,7 @@ export const TestEditorForm = () => {
     try {
       await addTest().unwrap();
       navigate('/');
+      toast.success('Тест успешно создан', {duration: 7000});
     } catch (err: any) {
       handleApiError(err);
     }

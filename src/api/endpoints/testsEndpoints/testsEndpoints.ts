@@ -1,23 +1,28 @@
-import {normalizeData, type NormalizedData} from "../../helpers/normalizeData";
-import {API_TAGS, apiSlice} from "@/api/slice/api";
-import type {SuccessResponse} from "@/api/schema/ResponseSchema";
-import type {RootState} from "@/redux/store.ts";
-import type {ITestBase, ITestForUser, PassTestResponse} from "@/api/endpoints/testsEndpoints/schema/TestsEndpointsSchema.ts";
-import type {FetchBaseQueryError} from "@reduxjs/toolkit/query";
+import {normalizeData, type NormalizedData} from '../../helpers/normalizeData';
+import {API_TAGS, apiSlice} from '@/api/slice/api';
+import type {SuccessResponse} from '@/api/schema/ResponseSchema';
+import type {RootState} from '@/redux/store.ts';
+import type {
+  ITestBase,
+  ITestForUser,
+  PassTestResponse,
+} from '@/api/endpoints/testsEndpoints/schema/TestsEndpointsSchema.ts';
+import type {FetchBaseQueryError} from '@reduxjs/toolkit/query';
 
-const testsEndpoints = apiSlice.injectEndpoints({
+export const testsEndpoints = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getTests: builder.query<NormalizedData<ITestBase>, void>({
       query: () => '/tests',
       transformResponse: (response: SuccessResponse<{tests: ITestBase[]}>) => {
         return normalizeData(response.data.tests);
       },
+      providesTags: [API_TAGS.TESTS],
     }),
     getTest: builder.query<ITestForUser, string>({
       query: (testId) => `/tests/${testId}`,
       transformResponse: (response: SuccessResponse<{test: ITestForUser}>) => {
         return response.data.test;
-      }
+      },
     }),
     submitTest: builder.mutation<PassTestResponse, void>({
       queryFn: async (arg, api, extraOptions, baseQuery) => {
@@ -27,11 +32,11 @@ const testsEndpoints = apiSlice.injectEndpoints({
         const {data, error} = await baseQuery({
           url: `/tests/${testId}/submit`,
           method: 'POST',
-          body: {answers}
+          body: {answers},
         });
 
         if (error) {
-          return {error: error as FetchBaseQueryError}
+          return {error: error as FetchBaseQueryError};
         }
 
         const successResponse = data as SuccessResponse<PassTestResponse>;
@@ -49,20 +54,28 @@ const testsEndpoints = apiSlice.injectEndpoints({
           body: {
             name,
             description,
-            questions
-          }
+            questions,
+          },
         });
 
         if (error) {
-          return {error: error as FetchBaseQueryError}
+          return {error: error as FetchBaseQueryError};
         }
 
         const successResponse = data as SuccessResponse<null>;
         return {data: successResponse};
       },
+      invalidatesTags: [API_TAGS.TESTS],
+    }),
+    deleteTest: builder.mutation<null, string>({
+      query: (testId) => ({
+        url: `/admin/tests/${testId}`,
+        method: 'DELETE',
+      }),
       invalidatesTags: [API_TAGS.TESTS]
     }),
-  })
+  }),
 });
 
-export const {useGetTestsQuery, useGetTestQuery, useSubmitTestMutation, useAddTestMutation} = testsEndpoints;
+export const {useGetTestsQuery, useGetTestQuery, useSubmitTestMutation, useAddTestMutation, useDeleteTestMutation} =
+  testsEndpoints;

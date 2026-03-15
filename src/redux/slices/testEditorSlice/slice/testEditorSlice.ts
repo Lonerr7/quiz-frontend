@@ -1,5 +1,6 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import type {Question, TestEditorSliceInitialState} from '../schema/TestEditorSliceSchema';
+import {testsEndpoints} from "@/api/endpoints/testsEndpoints/testsEndpoints.ts";
 
 const initialState: TestEditorSliceInitialState = {
   id: null,
@@ -30,6 +31,9 @@ const testEditorSlice = createSlice({
       state.questions = state.questions.filter((_, i) => i !== action.payload);
     },
     resetState: () => initialState,
+  },
+  extraReducers: builder => {
+    builder.addMatcher(testsEndpoints.endpoints.addTest.matchFulfilled, () => initialState)
   },
 });
 
