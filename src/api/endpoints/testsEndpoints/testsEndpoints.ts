@@ -33,15 +33,18 @@ export const testsEndpoints = apiSlice.injectEndpoints({
       },
       providesTags: (result, error, arg) => [{type: API_TAGS.TESTS, id: arg}]
     }),
-    submitTest: builder.mutation<PassTestResponse, void>({
-      queryFn: async (arg, api, extraOptions, baseQuery) => {
+    submitTest: builder.mutation<PassTestResponse, string>({
+      queryFn: async (name, api, extraOptions, baseQuery) => {
         const state = api.getState() as RootState;
         const {testId, answers} = state.passTest;
 
         const {data, error} = await baseQuery({
           url: `/tests/${testId}/submit`,
           method: 'POST',
-          body: {answers},
+          body: {
+            name,
+            answers,
+          },
         });
 
         if (error) {

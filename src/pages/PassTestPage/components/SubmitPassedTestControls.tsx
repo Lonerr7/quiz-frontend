@@ -1,23 +1,28 @@
-import {Button, Spinner} from "@/components/common";
-import {useSubmitTestMutation} from "@/api/endpoints/testsEndpoints/testsEndpoints.ts";
-import type {ITestForUser} from "@/api/endpoints/testsEndpoints/schema/TestsEndpointsSchema.ts";
-import {type FC, type RefObject, useMemo, useRef, useState} from "react";
-import {useAppDispatch, useAppSelector} from "@/redux/hooks/reduxHooks.ts";
-import {getPassTestAnswers} from "@/redux/slices/passTestSlice/selectors/getPassTestAnswers.ts";
-import {useNavigate} from "react-router";
+import {Button} from '@/components/common';
+import {useSubmitTestMutation} from '@/api/endpoints/testsEndpoints/testsEndpoints.ts';
+import type {ITestForUser} from '@/api/endpoints/testsEndpoints/schema/TestsEndpointsSchema.ts';
+import {type FC, type RefObject, useMemo, useRef, useState} from 'react';
+import {useAppDispatch, useAppSelector} from '@/redux/hooks/reduxHooks.ts';
+import {getPassTestAnswers} from '@/redux/slices/passTestSlice/selectors/getPassTestAnswers.ts';
+import {useNavigate} from 'react-router';
 import {findUnansweredQuestion} from '../helpers/findUnansweredQuestion.ts';
-import {ConfirmDialog} from "@/components/ConfirmDialog/ConfirmDialog.tsx";
-import {passTestSliceActions} from "@/redux/slices/passTestSlice/slice/passTestSlice.ts";
+import {ConfirmDialog} from '@/components/ConfirmDialog/ConfirmDialog.tsx';
+import {passTestSliceActions} from '@/redux/slices/passTestSlice/slice/passTestSlice.ts';
 import {toast} from 'sonner';
-import {handleApiError} from "@/api/helpers/handleApiError.ts";
+import {handleApiError} from '@/api/helpers/handleApiError.ts';
+import {ModalInput} from '@/components/ModalInput/ModalInput.tsx';
 
 interface SubmitPassedTestControlsProps {
   testFromServer: ITestForUser | undefined;
   questionRefs: RefObject<Map<string, HTMLLIElement>>;
 }
 
-export const SubmitPassedTestControls: FC<SubmitPassedTestControlsProps> = ({testFromServer, questionRefs}) => {
+export const SubmitPassedTestControls: FC<SubmitPassedTestControlsProps> = ({
+  testFromServer,
+  questionRefs,
+}) => {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
   const [submitTest, {isLoading: isTestSubmitting}] = useSubmitTestMutation();
   const userAnswers = useAppSelector(getPassTestAnswers);
   const unansweredQuestionId = useRef<string>('');
@@ -31,18 +36,23 @@ export const SubmitPassedTestControls: FC<SubmitPassedTestControlsProps> = ({tes
       return [];
     }
 
-    return testFromServer.questions.map(q => q._id);
+    return testFromServer.questions.map((q) => q._id);
   }, [testFromServer]);
 
-  const finishTest = async () => {
+  const finishTest = async (name: string) => {
+    if (!name) {
+
+      return;
+    }
+
     try {
-      const passedTest = await submitTest().unwrap();
+      const passedTest = await submitTest(name).unwrap();
       toast.dismiss();
       navigate('/test-result', {state: {testResult: passedTest}});
     } catch (err: any) {
       handleApiError(err);
     }
-  }
+  };
 
   const handleSubmit = () => {
     if (Object.keys(userAnswers).length !== testQuestionIds.length) {
@@ -51,8 +61,8 @@ export const SubmitPassedTestControls: FC<SubmitPassedTestControlsProps> = ({tes
       setIsSubmitDialogOpen(true);
       return;
     }
-    finishTest();
-  }
+    setIsOpen(true);
+  };
 
   const handleCloseModalWithScroll = () => {
     const unansweredQuestion = questionRefs.current?.get(unansweredQuestionId.current);
@@ -70,11 +80,10 @@ export const SubmitPassedTestControls: FC<SubmitPassedTestControlsProps> = ({tes
       }, 3000);
     }
     setIsSubmitDialogOpen(false);
-  }
+  };
 
   return (
     <div className="flex justify-end items-center gap-2">
-      {isTestSubmitting && <Spinner className="w-6 h-6"/>}
       <Button className="items-center gap-1.5" onClick={handleSubmit} disabled={isTestSubmitting}>
         <span>Завершить тест</span>
       </Button>
@@ -85,6 +94,13 @@ export const SubmitPassedTestControls: FC<SubmitPassedTestControlsProps> = ({tes
         onConfirm={handleCloseModalWithScroll}
         onOpenChange={handleCloseModalWithScroll}
       />
+      <ModalInput
+        open={isOpen}
+        onOpenChange={() => setIsOpen(false)}
+        confirmButtonText="Завершить"
+        isLoading={isTestSubmitting}
+        onConfirm={finishTest}
+      />
     </div>
-  )
-}
+  );
+};
