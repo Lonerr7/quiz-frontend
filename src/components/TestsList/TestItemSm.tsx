@@ -29,7 +29,7 @@ export const TestItemSm: FC<TestItemSmProps> = ({test, className, me, onDelete})
         <h2 className="text-lg font-bold text-text-main group-hover:text-primary transition-colors leading-tight">
           {name}
         </h2>
-        <div className="flex items-center justify-between pt-3 border-t border-border/50">
+        <div className="flex items-center justify-between gap-3 flex-wrap pt-3 border-t border-border/50">
           <p className="text-xs font-medium text-text-muted flex items-center gap-1.5">
             <span className="opacity-70">Создан:</span>
             {new Date(createdAt).toLocaleDateString('ru-RU', {
