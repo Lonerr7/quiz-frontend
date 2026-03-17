@@ -45,7 +45,7 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
         }
       }}
     >
-      <DialogContent className={cn('flex flex-col gap-6 border-none shadow-2xl', className)}>
+      <DialogContent className={cn('w-4/5 md:w-3/4 lg:w-2/4 xl:w-1/2 flex flex-col gap-6 border-none shadow-2xl', className)}>
         <div className="flex flex-col gap-2">
           <DialogTitle className="md:text-2xl font-bold text-text-main mb-0">{title}</DialogTitle>
           {description ? (

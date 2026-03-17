@@ -1,14 +1,15 @@
-import {useNavigate, useParams} from "react-router";
-import {PageWrapper} from "@/components/common/PageWrapper.tsx";
-import {useGetTestQuery} from "@/api/endpoints/testsEndpoints/testsEndpoints.ts";
-import {useEffect, useRef} from "react";
-import {useAppDispatch, useAppSelector} from "@/redux/hooks/reduxHooks.ts";
-import {passTestSliceActions} from "@/redux/slices/passTestSlice/slice/passTestSlice.ts";
-import {QuestionWithAnswers} from "@/components";
-import {Button} from "@/components/common";
-import {SubmitPassedTestControls} from "./components/SubmitPassedTestControls";
-import {getUnansweredQuestion} from "@/redux/slices/passTestSlice/selectors/getUnansweredQuestion.ts";
-import {handleApiError} from "@/api/helpers/handleApiError.ts";
+import {useNavigate, useParams} from 'react-router';
+import {PageWrapper} from '@/components/common/PageWrapper.tsx';
+import {useGetTestQuery} from '@/api/endpoints/testsEndpoints/testsEndpoints.ts';
+import {useEffect, useRef} from 'react';
+import {useAppDispatch, useAppSelector} from '@/redux/hooks/reduxHooks.ts';
+import {passTestSliceActions} from '@/redux/slices/passTestSlice/slice/passTestSlice.ts';
+import {QuestionWithAnswers} from '@/components';
+import {Button} from '@/components/common';
+import {SubmitPassedTestControls} from './components/SubmitPassedTestControls';
+import {getUnansweredQuestion} from '@/redux/slices/passTestSlice/selectors/getUnansweredQuestion.ts';
+import {handleApiError} from '@/api/helpers/handleApiError.ts';
+import Skeleton from 'react-loading-skeleton';
 
 export const PassTestPage = () => {
   const {id} = useParams();
@@ -32,10 +33,16 @@ export const PassTestPage = () => {
   const handleAnswerSelect = (qId: string, answer: string) => {
     dispatch(setAnswer({qId, answer: Number(answer)}));
     dispatch(setUnansweredQuestion(null));
-  }
+  };
 
   if (isLoading) {
-    return <div>Загрузка теста...</div>
+    return (
+      <PageWrapper>
+        <Skeleton className="mb-6" width={98} height={44} />
+        <Skeleton className="mb-6" width="100%" height={98} />
+        <Skeleton className="mb-6" width="100%" height={226} count={5} borderRadius={16} />
+      </PageWrapper>
+    );
   }
 
   if (isError && getTestError) {
@@ -44,29 +51,20 @@ export const PassTestPage = () => {
       <PageWrapper>
         <div>Ошибка загрузки теста...</div>
       </PageWrapper>
-    )
+    );
   }
 
   return (
     <PageWrapper>
       {test ? (
         <div>
-          <Button
-            className="mb-6"
-            variant="outline"
-            size="medium"
-            onClick={() => navigate(-1)}
-          >
+          <Button className="mb-6" variant="outline" size="medium" onClick={() => navigate(-1)}>
             Назад
           </Button>
 
           <div className="mb-8 border-b border-border pb-6">
-            <h1 className="text-3xl font-bold text-text-main mb-3 font-open-sans">
-              {test.name}
-            </h1>
-            <p className="text-text-muted leading-relaxed">
-              {test.description}
-            </p>
+            <h1 className="text-3xl font-bold text-text-main mb-3 font-open-sans">{test.name}</h1>
+            <p className="text-text-muted leading-relaxed">{test.description}</p>
           </div>
 
           <ul className="flex flex-col gap-6 mb-10">
@@ -90,7 +88,9 @@ export const PassTestPage = () => {
 
           <SubmitPassedTestControls testFromServer={test} questionRefs={questionRefs} />
         </div>
-      ) : null}
+      ) : (
+        <div>Ошибка загрузки тестов. Повторите попытку позже</div>
+      )}
     </PageWrapper>
-  )
-}
+  );
+};

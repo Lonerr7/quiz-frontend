@@ -54,7 +54,7 @@ export const ModalInput: FC<ModalInputProps> = (props) => {
         }
       }}
     >
-      <DialogContent className={cn('flex flex-col gap-6 border-none shadow-2xl', className)}>
+      <DialogContent className={cn('w-3/4 md:w-2/3 lg:w-2/5 flex flex-col gap-6 border-none shadow-2xl', className)}>
         <div className="flex flex-col gap-2 mb-5">
           <DialogTitle className="md:text-2xl font-bold text-text-main mb-2">
             Завершить тест
