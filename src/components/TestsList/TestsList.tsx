@@ -46,9 +46,15 @@ export const TestsList = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div>Загрузка тестов. Пожалуйста подождите...</div>
+    )
+  }
+
   return (
     <>
-      {tests && !isLoading && !isMeLoading ? (
+      {tests && !isMeLoading ? (
         <>
           <ul className="flex flex-col gap-3.5">
             {tests.ids.map((testId) => (

@@ -1,16 +1,25 @@
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import {BASE_URL} from "@/config/app/AppConfig";
+import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+import {BASE_URL} from '@/config/app/AppConfig';
 
 export const API_TAGS = {
   ME: 'Me',
-  TESTS: 'Tests'
+  TESTS: 'Tests',
 } as const;
 
-const baseQuery = fetchBaseQuery({baseUrl: BASE_URL, credentials: 'include'});
+const baseQuery = fetchBaseQuery({
+  baseUrl: BASE_URL,
+  prepareHeaders: (headers) => {
+    const token = localStorage.getItem('jwt');
+
+    if (token) {
+      headers.set('authorization', `Bearer ${token}`);
+    }
+  },
+});
 
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: baseQuery,
   endpoints: () => ({}),
-  tagTypes: [API_TAGS.ME, API_TAGS.TESTS]
+  tagTypes: [API_TAGS.ME, API_TAGS.TESTS],
 });

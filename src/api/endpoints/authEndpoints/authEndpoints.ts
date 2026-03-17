@@ -1,6 +1,6 @@
 import {API_TAGS, apiSlice} from "@/api/slice/api";
 import type {SuccessResponse} from "@/api/schema/ResponseSchema";
-import type {IUser, LoginData} from './schema/AuthEndpointsSchema';
+import type {IUser, LoginData, LoginSuccessResponse} from './schema/AuthEndpointsSchema';
 
 const authEndpoints = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -25,13 +25,23 @@ const authEndpoints = apiSlice.injectEndpoints({
         method: 'POST',
         body: loginData,
       }),
-      invalidatesTags: [API_TAGS.ME]
+      invalidatesTags: [API_TAGS.ME],
+      transformResponse: (response: LoginSuccessResponse<{user: IUser}>) => {
+        localStorage.setItem('jwt', response.token);
+
+        return response.data.user;
+      },
     }),
     logOut: builder.mutation<undefined, void>({
-      query: () => ({
-        url: '/auth/logOut',
-        method: 'POST'
-      }),
+      queryFn: async (arg, api, extraOptions, baseQuery) => {
+        await baseQuery({
+          url: '/auth/logOut',
+          method: "POST"
+        });
+
+        localStorage.removeItem('jwt');
+        return {data: undefined};
+      },
       invalidatesTags: [API_TAGS.ME]
     })
   }),
