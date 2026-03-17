@@ -52,6 +52,12 @@ export const TestsList = () => {
     )
   }
 
+  if (!tests?.ids.length) {
+    return (
+      <div>Тесты еще не добавлены</div>
+    )
+  }
+
   return (
     <>
       {tests && !isMeLoading ? (
