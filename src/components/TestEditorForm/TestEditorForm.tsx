@@ -93,51 +93,53 @@ export const TestEditorForm: FC<TestEditorFormProps> = ({mode}) => {
   };
 
   return (
-    <form className="flex flex-col gap-5" onSubmit={handleSubmitTest}>
-      <div className="form-control">
-        <Label htmlFor="name">Название теста</Label>
-        <Input
-          name="name"
-          id="name"
-          value={testName}
-          onChange={(e) => {
-            dispatch(changeTestName(e.target.value));
-          }}
-        />
-      </div>
-      <div className="form-control">
-        <Label htmlFor="description">Описание (необязательно)</Label>
-        <Textarea
-          value={testDescription}
-          onChange={(e) => dispatch(changeTestDescription(e.target.value))}
-        />
-      </div>
-      <div>
-        <EditTestQuestionsList questions={testQuestions} />
-        <Button
-          className="mt-5"
-          type="button"
-          variant="outline"
-          size="full"
-          onClick={() => setIsAddDialogOpen(true)}
-        >
-          Добавить вопрос
-        </Button>
-      </div>
-      <div>
-        <Button size="full" disabled={isLoading || isTestEditing}>
-          {!isLoading || !isTestEditing ? 'Сохранить тест' : 'Сохраняем...'}
-        </Button>
-        {errorMsg && <ErrorMessage className="mt-2">{errorMsg.message}</ErrorMessage>}
-      </div>
-      {mode === 'editTest' && (
-        <Button variant="danger" size="full" onClick={handleDeleteTest} disabled={isTestDeleting}>
-          {!isTestDeleting ? 'Удалить тест' : 'Удаляем'}
-        </Button>
-      )}
-      {isAddDialogOpen && (
-        <AddQuestionDialog isOpen={isAddDialogOpen} setIsOpen={setIsAddDialogOpen} />
-      )}
-    </form>
+    <>
+      <form className="flex flex-col gap-5" onSubmit={handleSubmitTest}>
+        <div className="form-control">
+          <Label htmlFor="name">Название теста</Label>
+          <Input
+            name="name"
+            id="name"
+            value={testName}
+            onChange={(e) => {
+              dispatch(changeTestName(e.target.value));
+            }}
+          />
+        </div>
+        <div className="form-control">
+          <Label htmlFor="description">Описание (необязательно)</Label>
+          <Textarea
+            value={testDescription}
+            onChange={(e) => dispatch(changeTestDescription(e.target.value))}
+          />
+        </div>
+        <div>
+          <EditTestQuestionsList questions={testQuestions} />
+          <Button
+            className="mt-5"
+            type="button"
+            variant="outline"
+            size="full"
+            onClick={() => setIsAddDialogOpen(true)}
+          >
+            Добавить вопрос
+          </Button>
+        </div>
+        <div>
+          <Button size="full" disabled={isLoading || isTestEditing}>
+            {!isLoading || !isTestEditing ? 'Сохранить тест' : 'Сохраняем...'}
+          </Button>
+          {errorMsg && <ErrorMessage className="mt-2">{errorMsg.message}</ErrorMessage>}
+        </div>
+        {mode === 'editTest' && (
+          <Button variant="danger" size="full" onClick={handleDeleteTest} disabled={isTestDeleting}>
+            {!isTestDeleting ? 'Удалить тест' : 'Удаляем'}
+          </Button>
+        )}
+        {isAddDialogOpen && (
+          <AddQuestionDialog isOpen={isAddDialogOpen} setIsOpen={setIsAddDialogOpen} />
+        )}
+      </form>
+    </>
   );
 };

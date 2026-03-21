@@ -3,6 +3,7 @@ import {LoginPage, NotFoundPage, TestsPage, AddTestPage, TestResultPage, EditTes
 import {ProtectedRoute} from "@/config/router/components/ProtectedRoute";
 import {Layout} from "@/components";
 import {PassTestPage} from "@/pages/PassTestPage/PassTestPage.tsx";
+import {PageWrapper} from "@/components/common/PageWrapper.tsx";
 
 export const router = createHashRouter([
   {
@@ -14,25 +15,37 @@ export const router = createHashRouter([
         path: 'add-test',
         element: (
           <ProtectedRoute allowedRoles={['admin']}>
-            <AddTestPage />
+            <PageWrapper>
+              <AddTestPage />
+            </PageWrapper>
           </ProtectedRoute>
         )
       },
       {
         path: 'tests/:id',
-        Component: PassTestPage,
+        element: (
+          <PageWrapper>
+            <PassTestPage/>
+          </PageWrapper>
+        ),
       },
       {
         path: 'tests/:id/edit',
         element: (
           <ProtectedRoute allowedRoles={['admin']}>
-            <EditTestPage/>
+            <PageWrapper>
+              <EditTestPage/>
+            </PageWrapper>
           </ProtectedRoute>
         )
       },
       {
         path: 'test-result',
-        Component: TestResultPage
+        element: (
+          <PageWrapper>
+            <TestResultPage/>
+          </PageWrapper>
+        )
       }
     ],
   },

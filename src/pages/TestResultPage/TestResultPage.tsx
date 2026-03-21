@@ -1,4 +1,3 @@
-import {PageWrapper} from '@/components/common/PageWrapper.tsx';
 import {useLocation, useNavigate} from 'react-router';
 import type {PassTestResponse} from '@/api/endpoints/testsEndpoints/schema/TestsEndpointsSchema';
 import {Button} from '@/components/common';
@@ -11,7 +10,7 @@ export const TestResultPage = () => {
   const testResult: PassTestResponse | undefined = location.state?.testResult;
 
   return (
-    <PageWrapper>
+    <>
       {testResult ? (
         <div>
           <div className="mb-8">
@@ -53,6 +52,6 @@ export const TestResultPage = () => {
       ) : (
         <div>Тут ничего нет(</div>
       )}
-    </PageWrapper>
+    </>
   );
 };
