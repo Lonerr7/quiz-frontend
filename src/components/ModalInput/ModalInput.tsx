@@ -43,8 +43,6 @@ export const ModalInput: FC<ModalInputProps> = (props) => {
     onConfirm(fields.name);
   };
 
-  console.log(errors);
-
   return (
     <Dialog
       open={open}

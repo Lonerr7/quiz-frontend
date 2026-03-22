@@ -3,10 +3,13 @@ import {Button} from "@/components/common/Button";
 import {useNavigate} from "react-router";
 import {useEffect} from "react";
 import {useAuth} from "@/api/hooks/useAuth.ts";
+import {useSetPageTitle} from "@/helpers/hooks/useSetPageTitle.ts";
 
 export const LoginPage = () => {
   const {me, isLoading} = useAuth();
   const navigate = useNavigate();
+
+  useSetPageTitle('Войти в систему');
 
   useEffect(() => {
     if (me && !isLoading) {

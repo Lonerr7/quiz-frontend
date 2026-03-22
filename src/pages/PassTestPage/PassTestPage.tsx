@@ -9,6 +9,7 @@ import {getUnansweredQuestion} from '@/redux/slices/passTestSlice/selectors/getU
 import {handleApiError} from '@/api/helpers/handleApiError.ts';
 import Skeleton from 'react-loading-skeleton';
 import {GoBackButton} from '@/components/GoBackButton/GoBackButton.tsx';
+import {useSetPageTitle} from "@/helpers/hooks/useSetPageTitle.ts";
 
 export const PassTestPage = () => {
   const {id} = useParams();
@@ -17,6 +18,8 @@ export const PassTestPage = () => {
   const questionRefs = useRef<Map<string, HTMLLIElement>>(new Map());
   const dispatch = useAppDispatch();
   const {setTestId, setAnswer, resetState, setUnansweredQuestion} = passTestSliceActions;
+
+  useSetPageTitle(test?.name);
 
   useEffect(() => {
     if (!isError && test) {

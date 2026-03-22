@@ -6,12 +6,15 @@ import {testEditorSliceActions} from '@/redux/slices/testEditorSlice/slice/testE
 import {TestEditorForm} from '@/components/TestEditorForm/TestEditorForm.tsx';
 import Skeleton from 'react-loading-skeleton';
 import {GoBackButton} from "@/components/GoBackButton/GoBackButton.tsx";
+import {useSetPageTitle} from "@/helpers/hooks/useSetPageTitle.ts";
 
 export const EditTestPage = () => {
   const {id} = useParams();
   const {data: test, isLoading, isError} = useGetTestForAdminQuery(id!);
   const dispatch = useAppDispatch();
   const {setTest, resetState} = testEditorSliceActions;
+
+  useSetPageTitle(test?.name ? `Редактировать тест: "${test?.name}"` : undefined);
 
   useEffect(() => {
     if (test && !isLoading && !isError) {
